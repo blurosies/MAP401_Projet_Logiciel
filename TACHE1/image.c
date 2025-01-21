@@ -255,32 +255,17 @@ Image negatif_image(Image I)
 	int j;
 	UINT hauteur= hauteur_image(I);
 	UINT largeur= largeur_image(I);
+	Image N=creer_image(largeur,hauteur);
 	for (int i=1 ; i<=hauteur ; i++){
 		for (j=1 ; j<=largeur ; j++){
 			if(get_pixel_image(I,j,i)==0){
-				set_pixel_image(I,j,i,1);
+				set_pixel_image(N,j,i,1);
 			}
 			else{
-				set_pixel_image(I,j,i,0);
+				set_pixel_image(N,j,i,0);
 
 			}
 		}
 	}
-	return I;	
-}
-
-void test_image(char* nom_fichier){
-	Image img=lire_fichier_image(nom_fichier);
-	ecrire_image(img);
-	negatif_image(img);
-	ecrire_image(img);
-}
-
-int main(int argc , char* argv[]){
-	if (argc!=2){
-		printf("uilisation: ./main <Nom_Fichier>\n");
-	}else{
-	test_image(argv[1]); // on suppose que le nom du terrain est correcte
-	}
-	return 1;
+	return N;	
 }

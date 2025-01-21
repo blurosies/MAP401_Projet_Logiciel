@@ -37,7 +37,7 @@ INCLUDEOPTS = -I$(INCDIR)
 COMPILOPTS = -g -Wall $(INCLUDEOPTS)
 
 # liste des executables
-EXECUTABLES = test_image
+EXECUTABLES = test_image test_geometrie
 
 
 #############################################################################
@@ -63,21 +63,33 @@ all : $(EXECUTABLES)
 ########################################################
 # regles explicites de compilation separee de modules
 # n'ayant pas de fichier .h ET/OU dependant d'autres modules
-image.o : image.c image.h 
+image.o : TACHE1/image.c TACHE1/image.h 
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Compilation du module image"
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-test_image.o : test_image.c image.h 
+test_image.o : TACHE1/test_image.c TACHE1/image.h 
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Compilation du module test_image"
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 		
-		
+geometrie2d.o : TACHE2/geometrie2d.c TACHE2/geometrie2d.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module image"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<		
+
+test_geometrie.o : TACHE2/test_geometrie.c TACHE2/geometrie2d.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module image"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<	
 ########################################################
 # regles explicites de creation des executables
 
@@ -88,6 +100,12 @@ test_image : test_image.o image.o
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
 
+test_geometrie :test_geometrie.o geometrie2d.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
 
 # regle pour "nettoyer" le r�pertoire
 clean:
