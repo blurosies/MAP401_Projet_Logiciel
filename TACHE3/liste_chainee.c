@@ -1,37 +1,4 @@
-#include<stdio.h>  /* utilisation des entrees-sorties standard de C */
-#include<stdlib.h> /* utilisation des fonctions malloc et free */
-#include "TACHE2/geometrie2d.h"
-
-Point set_point(double x, double y)
-{
-	Point P = {x,y}; return P;
-}
-
-/*---- le type cellule de liste de point ----*/
-typedef struct Cellule_Liste_Point_
-{
-	Point data;    /* donnee de l'element de liste */
-	struct Cellule_Liste_Point_* suiv; /* pointeur sur l'element suivant */
-} Cellule_Liste_Point;
-
-/*---- le type liste de point ----*/
-typedef struct Liste_Point_
-{
-	unsigned int taille;        /* nombre d'elements dans la liste */
-	Cellule_Liste_Point *first; /* pointeur sur le premier element de la liste */
-	Cellule_Liste_Point *last;  /* pointeur sur le dernier element de la liste */
-	                       /* first = last = NULL et taille = 0 <=> liste vide */
-} Liste_Point;
-
-typedef Liste_Point Contour; /* type Contour = type Liste_Point */
-
-/*---- le type tableau de point ----*/
-typedef struct Tableau_Point_
-{
-	unsigned int taille; /* nombre d'elements dans le tableau */
-	Point *tab;          /* (pointeur vers) le tableau des elements */
-} Tableau_Point;
-
+#include "liste_chainee.h"
 
 /* creer une cellule de liste avec l'element v 
    renvoie le pointeur sur la cellule de liste creee
@@ -45,7 +12,7 @@ Cellule_Liste_Point *creer_element_liste_Point(Point v)
 		fprintf(stderr, "creer_element_liste_Point : allocation impossible\n");
 		exit(-1);
 	}
-	el->data = v;
+	el->point = v;
 	el->suiv = NULL;
 	return el;
 }
@@ -152,7 +119,7 @@ Tableau_Point sequence_points_liste_vers_tableau(Liste_Point L)
 	Cellule_Liste_Point *el = L.first; /* pointeur sur l'element dans L */
 	while (el) 
 	{
-		T.tab[k] = el->data;
+		T.tab[k] = el->point;
 		k++; /* incrementer k */
 		el = el->suiv; /* passer a l'element suivant dans la liste chainee */
 	}
@@ -180,4 +147,12 @@ void ecrire_contour(Liste_Point L)
 	
 	free(TP.tab); /* supprimer le tableau de point TP */
 }
-
+void affiche_liste(Liste_Point L){
+	Cellule_Liste_Point *current=L.first;
+	while (current)
+	{
+		printf("(x:%f,y:%f)\n\n",current->point.abs,current->point.ord);
+		current=current->suiv;
+	}
+	
+}

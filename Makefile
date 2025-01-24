@@ -80,20 +80,28 @@ test_image.o : TACHE1/test_image.c TACHE1/image.h
 geometrie2d.o : TACHE2/geometrie2d.c TACHE2/geometrie2d.h
 	@echo ""
 	@echo "---------------------------------------------"
-	@echo "Compilation du module image"
+	@echo "Compilation du module geometrie2d"
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<		
 
 test_geometrie.o : TACHE2/test_geometrie.c TACHE2/geometrie2d.h
 	@echo ""
 	@echo "---------------------------------------------"
-	@echo "Compilation du module image"
+	@echo "Compilation du module test_geometrie"
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
+
+liste_chainee.o : TACHE3/liste_chainee.c TACHE3/liste_chainee.h TACHE2/geometrie2d.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module liste_chainee"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
 tache3.o : TACHE3/tache3.c TACHE3/tache3.h TACHE1/image.h TACHE2/geometrie2d.h
 	@echo ""
 	@echo "---------------------------------------------"
-	@echo "Compilation du module image"
+	@echo "Compilation du module tache3"
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
@@ -114,7 +122,7 @@ test_geometrie :test_geometrie.o geometrie2d.o
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
 
-tache3: tache3.o image.o exemple_sequence_point.o geometrie2d.o
+tache3: tache3.o image.o geometrie2d.o liste_chainee.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@

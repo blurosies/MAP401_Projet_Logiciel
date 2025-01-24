@@ -1,5 +1,5 @@
 #include "TACHE1/image.h"
-#include "TACHE2/geometrie2d.h"
+#include "liste_chainee.h"
 #include "tache3.h"
 #include <stdio.h>
 
@@ -128,25 +128,29 @@ Point avancer(Point current,Orientation O){
     return current;
 }
 
-void contour(Image I,Point init){
+Liste_Point contour(Image I,Point init){
+    Liste_Point L = creer_liste_Point_vide();
     Point current ={init.abs-1,init.ord-1};
-    printf("%f %f\n",current.abs,current.ord);
+    L=ajouter_element_liste_Point(L,current);
     Orientation O=EST;
     BOOL boucle = TRUE;
     while (boucle)
     {
         current=avancer(current,O);
-        printf("%f %f\n",current.abs,current.ord);
+        L=ajouter_element_liste_Point(L,current);
         O = gestion_Orientation(I,current,O);
         if( (current.abs==init.abs-1 && current.ord==init.ord-1) && O==EST){
             boucle=FALSE;
         }
     }
+    return L;
 }
 
 int main(){
+    Liste_Point L;
     Image I;
-    I=lire_fichier_image("TACHE3/tete.pbm");
+    I=lire_fichier_image("TACHE3/lettreZ.pbm");
     Point init=init_position(I);
-    contour(I,init);
+    L=contour(I,init);
+    printf("Le nombre de segment est %d\n",L.taille-1);
 }
