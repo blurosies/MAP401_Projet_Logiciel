@@ -16,18 +16,16 @@ int main(int argc , char*argv[]){
     Vecteur multipli_v=mult_reel_v(u,4);
 
 
-    printf("%f %f\n",a.abs , a.ord);
-    printf("%f %f\n",b.abs,b.ord);
-    printf("%f %f\n",u.abs,u.ord);
-    printf("%f %f\n",v.abs,v.ord);
-    printf("%f %f\n",somme_p.abs,somme_p.ord);
-    printf("%f %f\n" ,somme_v.abs,somme_v.ord);
-    printf("%f %f\n",multipli_p.abs,multipli_p.ord);
-    printf("%f %f\n",multipli_v.abs,multipli_v.ord);
-    printf("%f\n",produit_scalaire(u,v));
-    printf("%f\n",norme_vect(u));
-    printf("%f\n",dist_points(a,b));
-
-
+    printf("Point a: %f %f\n",a.abs , a.ord);
+    printf("Point b: %f %f\n",b.abs,b.ord);
+    printf("Vecteur u: %f %f\n",u.abs,u.ord);
+    printf("Vecteur v: %f %f\n",v.abs,v.ord);
+    printf("Somme de a et b: %f %f\n",somme_p.abs,somme_p.ord);
+    printf("Somme de u et v: %f %f\n" ,somme_v.abs,somme_v.ord);
+    printf("Multiplier a par 4: %f %f\n",multipli_p.abs,multipli_p.ord);
+    printf("Multiplier u par 4: %f %f\n",multipli_v.abs,multipli_v.ord);
+    printf("Produit scalaire de u et v: %f\n",produit_scalaire(u,v));
+    printf("Norme de u: %f\n",norme_vect(u));
+    printf("Distance entre a et b: %f\n",dist_points(a,b));
 
 }
