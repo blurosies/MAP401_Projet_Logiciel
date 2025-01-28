@@ -2,6 +2,8 @@
 #include "liste_chainee.h"
 #include "tache3.h"
 #include <stdio.h>
+#include <string.h>
+#include <math.h>
 
 Point init_position(Image I){
     Point current = creer_point(1,1);
@@ -146,11 +148,36 @@ Liste_Point contour(Image I,Point init){
     return L;
 }
 
-int main(){
+void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom){
+    char fichier[100]="";
+    strcat(fichier,nom);
+    strcpy(fichier + strlen(fichier)-3,"eps");
+    FILE * f = fopen(fichier,"w");
+    Cellule_Liste_Point *current = L.first;
+    printf("cc(x:%f,y:%f)\n\n",round(current->point.abs*100),current->point.ord);
+    fprintf(f,"%%! PS−Adobe −3.0 EPSF−3.0\n%%%%BoundingBox : %d %d %d %d\n",0,0,I.la_largeur_de_l_image,I.la_hauteur_de_l_image);
+    fprintf(f,"%f %f moveto\n",round(current->point.abs*100)/100,round(current->point.ord*100)/100);
+    current=current->suiv;
+    for(int i =0;i<10;i++)
+    {
+        fprintf(f,"%f %f lineto\n",current->point.abs,current->point.ord);
+        current=current->suiv;
+    }
+    fprintf(f,"showpage\n");
+    
+}
+
+int main(int argc , char ** argv){
+    if(argc != 2 ){
+        printf("Format du programme ./tache3 <nom fichier>\n");
+        return 0;
+    }
     Liste_Point L;
     Image I;
-    I=lire_fichier_image("TACHE3/lettreZ.pbm");
+    I=lire_fichier_image(argv[1]);
     Point init=init_position(I);
     L=contour(I,init);
     printf("Le nombre de segment est %d\n",L.taille-1);
+    affiche_liste(L);
+    tracer_EPS("fill",I,L,argv[1]);
 }
