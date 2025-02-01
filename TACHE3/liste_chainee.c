@@ -151,7 +151,7 @@ void affiche_liste(Liste_Point L){
 	Cellule_Liste_Point *current=L.first;
 	while (current)
 	{
-		printf("(x:%f,y:%f)\n\n",current->point.abs,current->point.ord);
+		printf("(x:%f,y:%f)\n",current->point.abs,current->point.ord);
 		current=current->suiv;
 	}
 	
