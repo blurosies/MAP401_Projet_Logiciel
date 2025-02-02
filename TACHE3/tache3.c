@@ -29,6 +29,31 @@ Point init_position(Image I){
         return current;
     }
 }
+
+int est_candidat(Point p, Image I){ //on suppose que le point appartient bien à l'image
+    if((get_pixel_image(I,p.abs,p.ord)==1) && (get_pixel_image(I,p.abs,p.ord-1)==0))
+        return 1;
+    else 
+        return 0;
+} 
+
+Liste_Point liste_candidats(Image I){
+    int j;
+    int i;
+    Liste_Point l_candidats = creer_liste_Point_vide();
+    Point current = creer_point(1,1);
+    for (i=1 ; i<=I.la_hauteur_de_l_image ; i++){
+		for (j=1 ; j<=I.la_largeur_de_l_image ; j++){
+			if(est_candidat(current , I)){
+			    ajouter_element_liste_Point(l_candidats,current);
+			}
+            current.abs++;
+        }
+    current.ord++;
+    }
+    return l_candidats;
+}
+
 Orientation tourner_90_degres(Orientation O){
     switch (O)
     {
@@ -175,6 +200,7 @@ int main(int argc , char ** argv){
         return 0;
     }
     Liste_Point L;
+    Liste_Point cand;
     Image I;
     I=lire_fichier_image(argv[1]);
     ecrire_image(I);
@@ -183,4 +209,6 @@ int main(int argc , char ** argv){
     affiche_liste(L);
     printf("Le nombre de segment est %d\n",L.taille-1);
     tracer_EPS(argv[2],I,L,argv[1]);
+    cand=liste_candidats(I);
+    affiche_liste(cand);
 }
