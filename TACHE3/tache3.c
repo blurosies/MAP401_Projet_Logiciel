@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <stdbool.h>
 
 Point init_position(Image I){
     Point current = creer_point(1,1);
@@ -45,13 +46,24 @@ Liste_Point liste_candidats(Image I){
     for (i=1 ; i<=I.la_hauteur_de_l_image ; i++){
 		for (j=1 ; j<=I.la_largeur_de_l_image ; j++){
 			if(est_candidat(current , I)){
-			    ajouter_element_liste_Point(l_candidats,current);
+			    l_candidats=ajouter_element_liste_Point(l_candidats,current);
 			}
             current.abs++;
         }
-    current.ord++;
+        current.abs=1;
+        current.ord++;
     }
     return l_candidats;
+}
+
+Image masque(Image I , Liste_Point liste_candidats){
+    Image M=creer_image(I.la_largeur_de_l_image,I.la_hauteur_de_l_image);
+    Cellule_Liste_Point *current=liste_candidats.first;
+    for (int i=1 ; i<=liste_candidats.taille ; i++){
+        set_pixel_image(M , current->point.abs ,current->point.ord , 1);
+        current=current->suiv;
+    }
+    return M;
 }
 
 Orientation tourner_90_degres(Orientation O){
@@ -155,14 +167,19 @@ Point avancer(Point current,Orientation O){
     return current;
 }
 
-Liste_Point contour(Image I,Point init){
+Liste_Point contour(Image I,Image M, Point init){
     Liste_Point L = creer_liste_Point_vide();
     Point current ={init.abs-1,init.ord-1};
     L=ajouter_element_liste_Point(L,current);
     Orientation O=EST;
     BOOL boucle = TRUE;
+    if (O==EST && get_pixel_image(M,current.abs+1,current.ord+1)==1)
+        set_pixel_image(M,current.abs+1,current.ord+1,0);
     while (boucle)
     {
+        if (O==EST&& get_pixel_image(M,current.abs+1,current.ord+1)==1){
+            set_pixel_image(M,current.abs+1,current.ord+1,0);
+        }
         current=avancer(current,O);
         L=ajouter_element_liste_Point(L,current);
         O = gestion_Orientation(I,current,O);
@@ -172,26 +189,68 @@ Liste_Point contour(Image I,Point init){
     }
     return L;
 }
+Liste_Contour contour_complet(Image I){
+    int nb_segments=0;
+    Liste_Contour contours=creer_liste_Contour_vide();
+    Liste_Point cand=liste_candidats(I);
+    Image M=masque(I,cand); //cherche la lise des points candidats rt génère l'image masquéé M
+    Liste_Point cont;
+    while(image_blanche(M)==0){
+        Point init= init_position(M);
+        cont=contour(I,M,init);
+        contours=ajouter_element_liste_Contour(contours,cont);
+    }
+    Cellule_Liste_Contour *current_contour =contours.first;
+    for(int i =0;i<contours.taille;i++){
+        nb_segments+=current_contour->contour.taille-1;
+        current_contour=current_contour->suiv;
+    }
+    printf("Il y a %d contours et un total de %d segments \n",contours.taille,nb_segments);
+    return contours;
+}
 
-void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom){
-    char fichier[100]="";
-    strcat(fichier,nom);
-    strcpy(fichier + strlen(fichier)-3,"eps");
-    FILE * f = fopen(fichier,"w");
+void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour){
+    FILE *f;
+    char fichier[256]="";
+    char *slash_pos = strrchr(nom,'/');
+    sprintf(fichier,"%.*s/Fichier_eps/%.*seps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
     Cellule_Liste_Point *current = L.first;
-    fprintf(f,"%%! PS−Adobe −3.0 EPSF−3.0\n%%%%BoundingBox: %d %d %d %d\n",0,0,I.la_largeur_de_l_image,I.la_hauteur_de_l_image);
-    fprintf(f,"0 setlinewidth\n");
+    if(premier_countour){
+        f = fopen(fichier,"w");
+        fprintf(f,"%%! PS Adobe 3.0 EPSF 3.0\n%%%%BoundingBox: %d %d %d %d\n",0,0,I.la_largeur_de_l_image,I.la_hauteur_de_l_image);
+        fprintf(f,"0 setlinewidth\n");
+    }
+    else{
+         f = fopen(fichier,"a");
+    }
     fprintf(f,"%f %f moveto\n",current->point.abs,I.la_hauteur_de_l_image-current->point.ord);
     current=current->suiv;
-    printf("%d",L.taille);
     for(int i =0;i<L.taille-1;i++)
     {
         fprintf(f,"%f %f lineto\n",current->point.abs,I.la_hauteur_de_l_image- current->point.ord);
         current=current->suiv;
     }
-    fprintf(f,"%s\n",mode);
-    fprintf(f,"showpage\n");
-    
+    if(dernier_contour){
+        fprintf(f,"%s\n",mode);
+        fprintf(f,"showpage\n");
+    }
+    fclose(f);
+}
+void tracer_EPS_contour_multiple(char *mode,Image I,Liste_Contour L,char *nom){
+    Cellule_Liste_Contour *current_contour =L.first;
+    for(int i = 0;i<L.taille;i++){
+        if(i==0){
+            printf("%d",i);
+            tracer_EPS(mode,I,L.first->contour,nom,true,false);//Cas premier contour
+        }
+        else if(i==L.taille-1){
+            tracer_EPS(mode,I,current_contour->contour,nom,false,true);//Cas dernier contour;
+        }
+        else {
+            tracer_EPS(mode,I,current_contour->contour,nom,false,false);
+        }
+        current_contour=current_contour->suiv;
+    }
 }
 
 int main(int argc , char ** argv){
@@ -199,16 +258,14 @@ int main(int argc , char ** argv){
         printf("Format du programme ./tache3 <nom fichier> <mode de remplissage(stroke/fill) \n");
         return 0;
     }
-    Liste_Point L;
-    Liste_Point cand;
+    Liste_Contour L;
     Image I;
     I=lire_fichier_image(argv[1]);
-    ecrire_image(I);
-    Point init=init_position(I);
-    L=contour(I,init);
-    affiche_liste(L);
-    printf("Le nombre de segment est %d\n",L.taille-1);
-    tracer_EPS(argv[2],I,L,argv[1]);
-    cand=liste_candidats(I);
-    affiche_liste(cand);
+    L=contour_complet(I);
+    if(L.taille==1){ //Cas ou l'image a un seul contour
+        tracer_EPS(argv[2],I,L.first->contour,argv[1],true,true);
+    }
+    else{ // Cas ou l'image a plusieur contours
+    tracer_EPS_contour_multiple(argv[2],I,L,argv[1]);
+    }
 }

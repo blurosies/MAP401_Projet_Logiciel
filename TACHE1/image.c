@@ -236,15 +236,28 @@ void ecrire_image(Image I)
 	for (int i=1 ; i<=hauteur ; i++){
 		for (j=1 ; j<=largeur ; j++){
 			if(get_pixel_image(I,j,i)==0){
-				printf(".");
+				printf("□ ");
 			}
 			else{
-				printf(" ");
+				printf("◾");
 			}
 			if(j==largeur)
 					printf("\n");
 		}
 	}	
+}
+int image_blanche(Image I){
+	int j;
+	UINT hauteur= hauteur_image(I);
+	UINT largeur= largeur_image(I);
+	for (int i=1 ; i<=hauteur ; i++){
+		for (j=1 ; j<=largeur ; j++){
+			if(get_pixel_image(I,j,i)==1){
+				return 0;
+			}
+		}
+	}
+	return 1;
 }
 
 /* creer et calculer l'image "negatif" de l'image I */

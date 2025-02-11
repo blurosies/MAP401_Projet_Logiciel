@@ -8,6 +8,7 @@ typedef struct Cellule_Liste_Point_
 	struct Cellule_Liste_Point_* suiv; /* pointeur sur l'element suivant */
 } Cellule_Liste_Point;
 
+
 /*---- le type liste de point ----*/
 typedef struct Liste_Point_
 {
@@ -25,6 +26,21 @@ typedef struct Tableau_Point_
 	unsigned int taille; /* nombre d'elements dans le tableau */
 	Point *tab;          /* (pointeur vers) le tableau des elements */
 } Tableau_Point;
+
+/*----le type liste de contours----*/
+typedef struct Cellule_Liste_Contour_
+{
+	Liste_Point contour;   
+	struct Cellule_Liste_Contour_* suiv; 
+
+} Cellule_Liste_Contour;
+
+typedef struct Liste_Contour_
+{
+	unsigned int taille;
+	Cellule_Liste_Contour *first; /* pointeur sur le premier element de la liste */
+
+} Liste_Contour;
 
 /* creer une cellule de liste avec l'element v 
    renvoie le pointeur sur la cellule de liste creee
@@ -59,3 +75,11 @@ void ecrire_contour(Liste_Point L);
 
 /*Affiche les elements de L utiliser pour le debug*/
 void affiche_liste(Liste_Point L);
+
+Cellule_Liste_Contour *creer_element_liste_Contour(Liste_Point v);
+
+Liste_Contour creer_liste_Contour_vide();
+
+Liste_Contour ajouter_element_liste_Contour(Liste_Contour L, Liste_Point e);
+
+void affiche_liste_Contour(Liste_Contour L);

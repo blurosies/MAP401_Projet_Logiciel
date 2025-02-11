@@ -16,6 +16,50 @@ Cellule_Liste_Point *creer_element_liste_Point(Point v)
 	el->suiv = NULL;
 	return el;
 }
+/*fonctions pour la liste de contours*/
+
+Cellule_Liste_Contour *creer_element_liste_Contour(Liste_Point v)
+{
+	Cellule_Liste_Contour *cont;
+	cont = malloc(sizeof(Cellule_Liste_Contour));
+	if (cont==NULL)
+	{
+		fprintf(stderr, "creer_element_liste_Point : allocation impossible\n");
+		exit(-1);
+	}
+	cont->contour = v;
+	cont->suiv = NULL;
+	return cont;
+}
+
+Liste_Contour creer_liste_Contour_vide()
+{
+	Liste_Contour L;
+	L.first=NULL;
+	L.taille=0;
+	return L;
+}
+
+
+Liste_Contour ajouter_element_liste_Contour(Liste_Contour L, Liste_Point e)
+{
+	Cellule_Liste_Contour *el;
+	
+	el = creer_element_liste_Contour(e);
+	if (L.first==NULL)
+	{
+		L.first = el;
+		el->suiv=NULL;
+	}
+	else
+	{
+		el->suiv=L.first;
+		L.first=el;
+	}
+	L.taille++;
+	return L;
+}
+
 /* creer une liste vide */
 Liste_Point creer_liste_Point_vide()
 {
@@ -23,20 +67,18 @@ Liste_Point creer_liste_Point_vide()
 	return L;
 }
 
-/* ajouter l'element e en fin de la liste L, renvoie la liste L modifiee */
 Liste_Point ajouter_element_liste_Point(Liste_Point L, Point e)
 {
 	Cellule_Liste_Point *el;
 	
 	el = creer_element_liste_Point(e);
-	if (L.taille == 0)
+	if (L.taille ==0 )
 	{
-		/* premier element de la liste */
 		L.first = L.last = el;
 	}
 	else
 	{
-		L.last->suiv = el;
+		L.last->suiv=el;
 		L.last = el;
 	}
 	L.taille++;
@@ -155,4 +197,17 @@ void affiche_liste(Liste_Point L){
 		current=current->suiv;
 	}
 	
+}
+
+void affiche_liste_Contour(Liste_Contour L){
+	if(L.first!=NULL){
+		Cellule_Liste_Contour *current=L.first;
+		while (current)
+		{
+			affiche_liste(current->contour);
+			printf("\n");
+			current=current->suiv;
+		}
+		
+	}
 }

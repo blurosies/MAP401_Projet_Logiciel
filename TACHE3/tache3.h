@@ -15,10 +15,15 @@ Orientation gestion_Orientation(Image I,Point current,Orientation O);
 Point avancer(Point current,Orientation O);
 
 // determine le contour de l'image
-Liste_Point contour(Image I,Point init);
+Liste_Point contour(Image I,Image M, Point init);
 
 // determine si un point est candidat ou pas
 int est_candidat(Point p, Image I);
 
 // retourne une liste de point candidats de l'image
 Liste_Point liste_candidats(Image I);
+
+Liste_Contour contour_complet(Image I);
+
+// produit l'image masquée à l'aide de sa liste de points candidats
+Image masque(Image I , Liste_Point liste_candidats);

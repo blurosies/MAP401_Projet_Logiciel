@@ -82,6 +82,9 @@ void ecrire_image(Image I);
 /* la fonction renvoie l'image "negatif" de I */
 Image negatif_image(Image I);
 
+// retourne 1 si l'image est complètement blanche, 0 sinon
+int image_blanche(Image I);
+
 void test_image(char* nom_fichier);
 
 #endif /* _IMAGE_H_ */
