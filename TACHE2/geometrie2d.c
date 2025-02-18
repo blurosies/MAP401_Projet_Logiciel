@@ -5,6 +5,7 @@
 #include "geometrie2d.h"
 
 
+
 Point creer_point(double abs , double ord){
     Point p={abs,ord}; 
     return p;
@@ -19,6 +20,10 @@ Vecteur creer_vecteur(double abs , double ord){
 Vecteur creer_vecteur_bip(Point a , Point b){
     Vecteur v={b.abs-a.abs,b.ord-a.ord}; 
     return v;
+}
+Segment creer_segment(Point a , Point b){
+    Segment seg={a,b};
+    return seg;
 }
 
 Point somme_point(Point a, Point b){
@@ -47,4 +52,34 @@ double norme_vect(Vecteur u){
 
 double dist_points(Point a, Point b){
     return sqrt(pow(a.abs-b.abs,2)+pow(a.ord-b.ord,2));
+}
+
+double distance_point_segment (Point p, Segment seg){
+    double dist;
+    Vecteur u=creer_vecteur_bip(seg.a, p);
+    Vecteur w=creer_vecteur_bip(seg.b, p);
+    Vecteur v=creer_vecteur_bip(seg.a, seg.b);
+    if(seg.a.abs==seg.b.abs && seg.a.ord==seg.b.ord){ //cas A = B
+        Vecteur u= creer_vecteur_bip(p , seg.b); // norme AP = norme BP
+        dist=norme_vect(u);
+    }
+    else {
+        double lambda;
+        printf("vecteur u.abs %f vecteur u.ord %f ",u.abs,u.ord);
+        printf("vecteur v.abs %f vecteur v.ord %f ",v.abs,v.ord);
+        printf("produit scalaire %f ",produit_scalaire(u,v));
+        printf("produit scalaire %f ",produit_scalaire(v,v));
+        lambda=produit_scalaire(u,v)/produit_scalaire(v,v);
+        printf("lambda %f\n",lambda);
+        if (lambda<0){
+            dist=norme_vect(u);
+        }else if( lambda>=0 && lambda<=1){
+                Point Q= {seg.a.abs + lambda*(seg.b.abs-seg.a.abs), seg.a.ord + lambda*(seg.b.ord-seg.a.ord)};
+                Vecteur q=creer_vecteur_bip(Q,p);
+                dist=norme_vect(q);
+        }else{
+            dist=norme_vect(w);
+        }
+    }
+    return dist;
 }

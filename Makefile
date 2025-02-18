@@ -37,7 +37,7 @@ INCLUDEOPTS = -I$(INCDIR)
 COMPILOPTS = -g -Wall $(INCLUDEOPTS)
 
 # liste des executables
-EXECUTABLES = test_image test_geometrie tache3
+EXECUTABLES = test_image test_geometrie tache3 tache6_test
 
 
 #############################################################################
@@ -104,6 +104,12 @@ tache3.o : TACHE3/tache3.c TACHE3/tache3.h TACHE1/image.h TACHE2/geometrie2d.h
 	@echo "Compilation du module tache3"
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
+tache6_test.o : TACHE6/tache6_test.c TACHE2/geometrie2d.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module tache6_test"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
 
 ########################################################
 # regles explicites de creation des executables
@@ -123,6 +129,12 @@ test_geometrie :test_geometrie.o geometrie2d.o
 	$(CC) $^ $(LDOPTS) -o $@
 
 tache3: tache3.o image.o geometrie2d.o liste_chainee.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+tache6_test: tache6_test.o geometrie2d.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@
