@@ -1,4 +1,10 @@
 #include <stdbool.h>
+#include "TACHE1/image.h"
+#include "liste_chainee.h"
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdbool.h>
 
 typedef enum {EST,SUD,OUEST,NORD} Orientation;
 

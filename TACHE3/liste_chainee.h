@@ -1,6 +1,9 @@
 #include<stdio.h>  /* utilisation des entrees-sorties standard de C */
 #include<stdlib.h> /* utilisation des fonctions malloc et free */
+#ifndef SEQUENCE_SEGMENT_H
+#define SEQUENCE_SEGMENT_H
 #include "TACHE2/geometrie2d.h"
+#endif
 /*---- le type cellule de liste de point ----*/
 typedef struct Cellule_Liste_Point_
 {
@@ -66,6 +69,9 @@ Liste_Point supprimer_premier_element_liste_Point(Liste_Point L);
 /* creer une sequence de points sous forme d'un tableau de points 
    a partir de la liste de points L */
 Tableau_Point sequence_points_liste_vers_tableau(Liste_Point L);
+
+/*creer une liste de point a partir d'une sequence de points*/
+Liste_Point tableau_vers_liste_points(Tableau_Point T);
 
 /* ecrire le contour L a l'ecran 
    cette fonction montre un exemple de conversion d'une liste de points en

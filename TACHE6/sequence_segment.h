@@ -1,4 +1,7 @@
+#ifndef SEQUENCE_SEGMENT_H
+#define SEQUENCE_SEGMENT_H
 #include "TACHE2/geometrie2d.h"
+#endif
 
 typedef struct Cellule_Liste_Segment
 {

@@ -1,16 +1,32 @@
-#include <stdio.h>
-#include "TACHE2/geometrie2d.h"
 #include "TACHE3/tache3.h"
-#include "TACHE3/liste_chainee.h"
-#include "TACHE1/image.h"
 #include "sequence_segment.h"
 
-void simplifie_contour(Liste_Point list,double distance){
+
+
+Liste_Point simplifie_contour(Liste_Point list,Point a,Point b,double d){
+    Liste_Point l= creer_liste_Point_vide();
     Tableau_Point tab_contour = sequence_points_liste_vers_tableau(list);
-    Segment seg = creer_segment(tab_contour.tab[0],tab_contour.tab[tab_contour.taille -1]);
+    Segment seg = creer_segment(a,b);
     double dmax = 0;
-    Point k = tab_contour.tab[0];
-    for()
+    Point k = a;
+    for(int i =0;i<tab_contour.taille;i++){
+        double dj = distance_point_segment(k,seg);
+        if(dmax<dj)
+        {
+            dmax = dj;
+            k = tab_contour.tab[i+1];
+        }
+    }
+    if(dmax<=d){
+        l=tableau_vers_liste_points(tab_contour);
+
+    }
+    else{
+        Liste_Point l1 = simplifie_contour(list,a,k,d);
+        Liste_Point l2 = simplifie_contour(list,k,b,d);
+        l=concatener_liste_Point(l1,l2);
+    }
+    return l;
 
 
 }
@@ -25,10 +41,10 @@ int main (int argc,char **argv ){
     double d = atof(argv[3]);
     I=lire_fichier_image(argv[1]);
     L=contour_complet(I);
-    Point current_point;
+    affiche_liste_Contour(L);
     for(int i=0;i<L.taille;i++){
-        simplifie_contour(L.first->contour,d);
+        L.first->contour=simplifie_contour(L.first->contour,L.first->contour.first->point,L.first->contour.last->point,d);
         L.first=L.first->suiv;
     }
-
+    affiche_liste_Contour(L);
 }

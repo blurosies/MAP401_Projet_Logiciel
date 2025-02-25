@@ -1,4 +1,3 @@
-
 typedef struct Point_
 {
 	double abs,ord;

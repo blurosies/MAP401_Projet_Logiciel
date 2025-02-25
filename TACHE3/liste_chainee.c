@@ -168,6 +168,13 @@ Tableau_Point sequence_points_liste_vers_tableau(Liste_Point L)
 	
 	return T;
 }
+Liste_Point tableau_vers_liste_points(Tableau_Point T){
+	Liste_Point L=creer_liste_Point_vide();
+	for(int i =0;i<T.taille;i++){
+		ajouter_element_liste_Point(L,T.tab[i]);
+	}
+	return L ;
+}
 
 /* ecrire le contour L a l'ecran 
    cette fonction montre un exemple de conversion d'une liste de points en

@@ -37,7 +37,7 @@ INCLUDEOPTS = -I$(INCDIR)
 COMPILOPTS = -g -Wall $(INCLUDEOPTS)
 
 # liste des executables
-EXECUTABLES = test_image test_geometrie tache3 tache6_test
+EXECUTABLES = test_image test_geometrie main_tache3 tache6_test tache6
 
 
 #############################################################################
@@ -111,6 +111,28 @@ tache6_test.o : TACHE6/tache6_test.c TACHE2/geometrie2d.h
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
+main_tache3.o : TACHE3/main_tache3.c TACHE3/tache3.c TACHE3/tache3.h TACHE1/image.h TACHE2/geometrie2d.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module tache3"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<	
+
+sequence_segment.o : TACHE6/sequence_segment.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module sequence_segment"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+tache6.o : TACHE6/tache6.c TACHE3/tache3.h TACHE3/liste_chainee.h TACHE1/image.h TACHE6/sequence_segment.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module tache6"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+
 ########################################################
 # regles explicites de creation des executables
 
@@ -128,7 +150,7 @@ test_geometrie :test_geometrie.o geometrie2d.o
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
 
-tache3: tache3.o image.o geometrie2d.o liste_chainee.o
+main_tache3: main_tache3.o tache3.o image.o geometrie2d.o liste_chainee.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@
@@ -140,6 +162,13 @@ tache6_test: tache6_test.o geometrie2d.o
 	@echo "Creation de l'executable "$@
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
+tache6: tache6.o image.o liste_chainee.o tache3.o geometrie2d.o 
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+
 
 # regle pour "nettoyer" le r�pertoire
 clean:
