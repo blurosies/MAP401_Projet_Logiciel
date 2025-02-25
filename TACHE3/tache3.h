@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 typedef enum {EST,SUD,OUEST,NORD} Orientation;
 
 // detecte le point initial
@@ -23,7 +25,14 @@ int est_candidat(Point p, Image I);
 // retourne une liste de point candidats de l'image
 Liste_Point liste_candidats(Image I);
 
+//retourne la liste de tous les contours d'une image
 Liste_Contour contour_complet(Image I);
 
 // produit l'image masquée à l'aide de sa liste de points candidats
 Image masque(Image I , Liste_Point liste_candidats);
+
+//crée le fichier eps d'une image avec un seul contour
+void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour);
+
+//crée le fichier eps d'une image avec plusieur contours
+void tracer_EPS_contour_multiple(char *mode,Image I,Liste_Contour L,char *nom);

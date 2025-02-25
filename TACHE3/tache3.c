@@ -217,7 +217,7 @@ void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour
     Cellule_Liste_Point *current = L.first;
     if(premier_countour){
         f = fopen(fichier,"w");
-        fprintf(f,"%%! PS Adobe 3.0 EPSF 3.0\n%%%%BoundingBox: %d %d %d %d\n",0,0,I.la_largeur_de_l_image,I.la_hauteur_de_l_image);
+        fprintf(f,"%%!PS-Adobe-3.0 EPSF-3.0\n%%%%BoundingBox: %d %d %d %d\n",0,0,I.la_largeur_de_l_image,I.la_hauteur_de_l_image);
         fprintf(f,"0 setlinewidth\n");
     }
     else{
@@ -240,7 +240,6 @@ void tracer_EPS_contour_multiple(char *mode,Image I,Liste_Contour L,char *nom){
     Cellule_Liste_Contour *current_contour =L.first;
     for(int i = 0;i<L.taille;i++){
         if(i==0){
-            printf("%d",i);
             tracer_EPS(mode,I,L.first->contour,nom,true,false);//Cas premier contour
         }
         else if(i==L.taille-1){
