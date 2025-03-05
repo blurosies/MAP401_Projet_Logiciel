@@ -65,12 +65,7 @@ double distance_point_segment (Point p, Segment seg){
     }
     else {
         double lambda;
-        printf("vecteur u.abs %f vecteur u.ord %f ",u.abs,u.ord);
-        printf("vecteur v.abs %f vecteur v.ord %f ",v.abs,v.ord);
-        printf("produit scalaire %f ",produit_scalaire(u,v));
-        printf("produit scalaire %f ",produit_scalaire(v,v));
         lambda=produit_scalaire(u,v)/produit_scalaire(v,v);
-        printf("lambda %f\n",lambda);
         if (lambda<0){
             dist=norme_vect(u);
         }else if( lambda>=0 && lambda<=1){
