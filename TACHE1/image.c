@@ -242,7 +242,7 @@ void ecrire_image(Image I)
 				printf("◾");
 			}
 			if(j==largeur)
-					printf("\n");
+				printf("\n");
 		}
 	}	
 }
@@ -276,7 +276,6 @@ Image negatif_image(Image I)
 			}
 			else{
 				set_pixel_image(N,j,i,0);
-
 			}
 		}
 	}
