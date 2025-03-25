@@ -57,6 +57,7 @@ Image masque(Image I , Liste_Point liste_candidats){
         set_pixel_image(M , current->point.abs ,current->point.ord , 1);
         current=current->suiv;
     }
+    supprimer_liste_Point(liste_candidats);
     return M;
 }
 
@@ -194,6 +195,7 @@ Liste_Contour contour_complet(Image I){
         cont=contour(I,M,init);
         contours=ajouter_element_liste_Contour(contours,cont);
     }
+    free(M.pointeur_vers_le_tableau_de_pixels);
     Cellule_Liste_Contour *current_contour =contours.first;
     for(int i =0;i<contours.taille;i++){
         nb_segments+=current_contour->contour.taille-1;

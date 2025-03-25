@@ -57,6 +57,8 @@ Liste_Point creer_liste_Point_vide();
 Liste_Point ajouter_element_liste_Point(Liste_Point L, Point e);
 /* supprimer tous les elements de la liste, renvoie la liste L vide */
 Liste_Point supprimer_liste_Point(Liste_Point L);
+/* supprimer tous les elements de la liste de contour */
+void supprimer_liste_contour(Liste_Contour contours);
 
 /* concatener L2 a la suite de L1, renvoie la liste L1 modifiee */
 Liste_Point concatener_liste_Point(Liste_Point L1, Liste_Point L2);

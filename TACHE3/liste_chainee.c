@@ -99,6 +99,15 @@ Liste_Point supprimer_liste_Point(Liste_Point L)
 	L.first = L.last = NULL; L.taille = 0;
 	return L;
 }
+void supprimer_liste_contour(Liste_Contour contours){
+	Cellule_Liste_Contour *current_contour=contours.first;
+	while(current_contour!=NULL){
+		Cellule_Liste_Contour *next= current_contour->suiv;
+		current_contour->contour=supprimer_liste_Point(current_contour->contour);
+		free(current_contour);
+		current_contour=next;
+	}
+}
 
 /* concatener L2 a la suite de L1, renvoie la liste L1 modifiee */
 Liste_Point concatener_liste_Point(Liste_Point L1, Liste_Point L2)
