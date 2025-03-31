@@ -23,3 +23,16 @@ Point calcul_ct_3 (int t , Bezier3 b );
 
 // conversion de bezier degré 2 au degré 3
 Bezier3 conversion_degre_2_3 (Bezier2 b);
+
+// Distance entre un point P et une courbe de bézier de degré 2
+double distance_point_bezier2 ();
+
+// Distance entre un point P et une courbe de bézier de degré 3
+double distance_point_bezier3 ();
+
+// approximation d'une partie du contour en une courbe de bézier de degré deux
+Bezier2 approx_bezier2 (Liste_Point contour);
+
+// approximation d'une partie du contour en une courbe de bézier de degré trois
+Bezier2 approx_bezier3 (Liste_Point contour);
+
