@@ -55,6 +55,14 @@ Liste_Point ajoute_bezier2 (Bezier2 B , Liste_Point contour){
     return contour;
 }
 
+Liste_Point ajoute_bezier3 (Bezier3 B , Liste_Point contour){
+    contour=ajouter_element_liste_Point(contour,B.c0);
+    contour=ajouter_element_liste_Point(contour,B.c1);
+    contour=ajouter_element_liste_Point(contour,B.c2);
+    contour=ajouter_element_liste_Point(contour,B.c3);
+    return contour;
+}
+
 double distance_point_bezier2 (){}
 
 double distance_point_bezier3 (){}
@@ -87,7 +95,7 @@ Bezier2 approx_bezier2 (Tableau_Point contour , int j1 , int j2){
 
 
 
-Liste_Point simplification_douglas_peucker(Tableau_Point tab_contour,int indice_a,int indice_b,double d){
+Liste_Point simplification_douglas_peucker_2(Tableau_Point tab_contour,int j1,int j2,double d){
 
 }
 
@@ -123,7 +131,7 @@ int main(int argc,char **argv){
         for(int i=0;i<L.taille;i++){
             Liste_Point ancient_contour=current_contour->contour;
             Tableau_Point tab_contour = sequence_points_liste_vers_tableau(current_contour->contour);
-            current_contour->contour=simplification_douglas_peucker(tab_contour,0,current_contour->contour.taille-1,d);
+            current_contour->contour=simplification_douglas_peucker_2(tab_contour,0,current_contour->contour.taille-1,d);
             supprimer_liste_Point(ancient_contour);
             free(tab_contour.tab);
             nb_segments+=current_contour->contour.taille;

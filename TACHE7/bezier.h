@@ -36,3 +36,11 @@ Bezier2 approx_bezier2 (Tableau_Point contour,int j1,int j2);
 // approximation d'une partie du contour en une courbe de bézier de degré trois
 Bezier3 approx_bezier3 (Tableau_Point tab_contour,int indice_a,int indice_b);
 
+// algo douglas pecker degre 2
+Liste_Point simplification_douglas_peucker_2(Tableau_Point tab_contour,int j1,int j2,double d);
+
+// ajoute  une bezier 2 a une liste de points
+Liste_Point ajoute_bezier2 (Bezier2 B , Liste_Point contour);
+
+// ajoute  une bezier 3 a une liste de points
+Liste_Point ajoute_bezier3 (Bezier3 B , Liste_Point contour);
