@@ -11,6 +11,7 @@ typedef struct Bezier3_
     Point c0, c1, c2, c3;
 } Bezier3;
 
+
 // creation d'une bezier 2 ou 3 à partir de points de controles
 Bezier2 creer_b2(Point c0 , Point c1 , Point c2);
 
@@ -34,5 +35,5 @@ double distance_point_bezier3 ();
 Bezier2 approx_bezier2 (Liste_Point contour);
 
 // approximation d'une partie du contour en une courbe de bézier de degré trois
-Bezier2 approx_bezier3 (Liste_Point contour);
+Bezier3 approx_bezier3 (Liste_Point contour);
 

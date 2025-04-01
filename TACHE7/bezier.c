@@ -1,10 +1,9 @@
 #include "TACHE1/image.h"
 #include "liste_chainee.h"
 #include "tache3.h"
-#include <string.h>
 #include <math.h>
-#include <stdbool.h>
 #include "bezier.h" 
+#include "sequence_segment.h"
 
 Bezier2 creer_b2(Point c0 , Point c1 , Point c2){
     Bezier2 B2 = {c0,c1,c2};
@@ -55,9 +54,53 @@ double distance_point_bezier2 (){}
 
 double distance_point_bezier3 (){}
 
-Bezier2 approx_bezier2 (Liste_Point contour){
+Liste_Point simplification_douglas_peucker(Tableau_Point tab_contour,int indice_a,int indice_b,double d){
+
+}
+
+Bezier2 approx_bezier2 (Tableau_Point contour,int j1,int j2){
     
 }
 
-Bezier2 approx_bezier3 (Liste_Point contour){}
+Bezier3 approx_bezier3 (Tableau_Point tab_contour,int indice_a,int indice_b){
+    int n =indice_b-indice_a;
+    if(n==1 || n==2){
+        Bezier2 b2=approx_bezier2(tab_contour,indice_a,indice_b);
+        Bezier3 b =conversion_degre_2_3(b2);
+    }
+    else if (n>=3){
+        Point c0=tab_contour.tab[indice_a];
+        Point c3=tab_contour.tab[indice_b];
+        int alpha=(-15*pow(n,3)+5*pow(n,2)+2*n+4)/(3*(n+2)*(3*pow(n,2)+1));
+        int beta=(10*pow(n,3)-15*pow(n,2)+n+2)/3*(n+2)*(3*pow(n,2)+1);
+    }
+    }
 
+
+int main(int argc,char **argv){
+    if(argc!=5){
+        printf("Format du programme ./tache3 <nom fichier> <type de fichier (pbm/contours) distance seuil mode de remplissage(fill/stroke) \n");
+        return 1;
+        }
+        Liste_Contour L;
+        Image I;
+        double d = atof(argv[3]);
+        I=lire_fichier_image(argv[1]);
+        L=contour_complet(I);
+        free(I.pointeur_vers_le_tableau_de_pixels);
+        Cellule_Liste_Contour *current_contour =L.first;
+        int nb_segments=0;
+        for(int i=0;i<L.taille;i++){
+            Liste_Point ancient_contour=current_contour->contour;
+            Tableau_Point tab_contour = sequence_points_liste_vers_tableau(current_contour->contour);
+            current_contour->contour=simplification_douglas_peucker(tab_contour,0,current_contour->contour.taille-1,d);
+            supprimer_liste_Point(ancient_contour);
+            free(tab_contour.tab);
+            nb_segments+=current_contour->contour.taille;
+            current_contour=current_contour->suiv;
+        }
+        nb_segments=nb_segments/2;
+        printf("Il y a un total de %d segments après simplifcation avec d=%f\n",nb_segments,d);
+        tracer_EPS_contour_multiple(argv[4],I,L,argv[1]);
+        supprimer_liste_contour(L);
+}
