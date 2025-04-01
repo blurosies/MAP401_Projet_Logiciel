@@ -1,4 +1,5 @@
-#include<stdio.h>
+#include "TACHE3/tache3.h"
+#include <math.h>
 
 typedef struct Bezier2_
 {
