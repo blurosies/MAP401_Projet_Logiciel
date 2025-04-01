@@ -65,8 +65,37 @@ Liste_Point ajoute_bezier3 (Bezier3 B , Liste_Point contour){
     contour=ajouter_element_liste_Point(contour,B.c3);
     return contour;
 }
+Liste_Point simplification_douglas_peucker_2(Tableau_Point tab_contour,int j1,int j2,double d){
+
+}
 
 double distance_point_bezier2 (){}
+
+Bezier2 approx_bezier2 (Tableau_Point contour , int j1 , int j2){
+    Point C0= contour.tab[j1]; //C0 = Pj1
+    Point C2= contour.tab[j2]; //C2 = Pj2
+    Point C1;
+    double n = j2-j1;
+
+    if (n==1){ //le contour est réduit a deux points
+        C1= creer_point((C0.abs+C2.abs)/2.0, (C0.ord+C2.ord)/2.0); // C1= (Pj1+Pj2)/2
+    } else {
+        double alpha=(3*n)/(n*n-1);
+        double beta=(1-2*n)/(2*(n+1));
+        double somme_abs=0;
+        double somme_ord=0;
+        for (int i = 1; i < n; i++)
+        {
+            somme_abs+=contour.tab[i+j1].abs;
+            somme_ord+=contour.tab[i+j1].ord;
+        }
+        double C1_abs= alpha*somme_abs + beta*(C0.abs+C2.abs);
+        double C1_ord= alpha*somme_ord + beta*(C0.ord+C2.ord);
+        C1=creer_point(C1_abs, C1_ord);
+    }
+    Bezier2 approx= creer_b2(C0,C1,C2);
+    return approx;
+}
 
 Liste_Point simplification_douglas_peucker_bezier3(Tableau_Point tab_contour,int j1,int j2,double d){
     Liste_Point l =creer_liste_Point_vide();
@@ -98,39 +127,6 @@ Liste_Point simplification_douglas_peucker_bezier3(Tableau_Point tab_contour,int
 double distance_point_bezier3 (Point p,Bezier3 b,double ti){
     return dist_points(p,calcul_ct_3(ti,b));
 }
-
-Bezier2 approx_bezier2 (Tableau_Point contour , int j1 , int j2){
-    Point C0= contour.tab[j1]; //C0 = Pj1
-    Point C2= contour.tab[j2]; //C2 = Pj2
-    Point C1;
-    double n = j2-j1;
-
-    if (n==1){ //le contour est réduit a deux points
-        C1= creer_point((C0.abs+C2.abs)/2.0, (C0.ord+C2.ord)/2.0); // C1= (Pj1+Pj2)/2
-    } else {
-        double alpha=(3*n)/(n*n-1);
-        double beta=(1-2*n)/(2*(n+1));
-        double somme_abs=0;
-        double somme_ord=0;
-        for (int i = 1; i < n; i++)
-        {
-            somme_abs+=contour.tab[i+j1].abs;
-            somme_ord+=contour.tab[i+j1].ord;
-        }
-        double C1_abs= alpha*somme_abs + beta*(C0.abs+C2.abs);
-        double C1_ord= alpha*somme_ord + beta*(C0.ord+C2.ord);
-        C1=creer_point(C1_abs, C1_ord);
-    }
-    Bezier2 approx= creer_b2(C0,C1,C2);
-    return approx;
-}
-
-
-
-Liste_Point simplification_douglas_peucker_2(Tableau_Point tab_contour,int j1,int j2,double d){
-
-}
-
 
 Bezier3 approx_bezier3 (Tableau_Point tab_contour,int j1,int j2){
     Bezier3 b;
