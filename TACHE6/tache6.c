@@ -3,9 +3,8 @@
 
 
 
-Liste_Point simplifie_contour(Liste_Point list,int indice_a,int indice_b,double d){
+Liste_Point simplifie_contour(Tableau_Point tab_contour,int indice_a,int indice_b,double d){
     Liste_Point l= creer_liste_Point_vide();
-    Tableau_Point tab_contour = sequence_points_liste_vers_tableau(list);
     Segment seg = creer_segment(tab_contour.tab[indice_a],tab_contour.tab[indice_b]);
     double dmax = 0;
     int k = indice_a;
@@ -20,17 +19,14 @@ Liste_Point simplifie_contour(Liste_Point list,int indice_a,int indice_b,double 
     if(dmax<=d){
         l=ajouter_element_liste_Point(l,tab_contour.tab[indice_a]);
         l=ajouter_element_liste_Point(l,tab_contour.tab[indice_b]);
-        free(tab_contour.tab);
 
     }
     else{
-        free(tab_contour.tab);
-        Liste_Point l1 = simplifie_contour(list,indice_a,k,d);
-        Liste_Point l2 = simplifie_contour(list,k,indice_b,d);
+        Liste_Point l1 = simplifie_contour(tab_contour,indice_a,k,d);
+        Liste_Point l2 = simplifie_contour(tab_contour,k,indice_b,d);
         l=concatener_liste_Point(l1,l2);
     }
     return l;
-
 
 }
 
@@ -49,8 +45,10 @@ int main (int argc,char **argv ){
     int nb_segments=0;
     for(int i=0;i<L.taille;i++){
         Liste_Point ancient_contour=current_contour->contour;
-        current_contour->contour=simplifie_contour(current_contour->contour,0,current_contour->contour.taille-1,d);
+        Tableau_Point tab_contour = sequence_points_liste_vers_tableau(current_contour->contour);
+        current_contour->contour=simplifie_contour(tab_contour,0,current_contour->contour.taille-1,d);
         supprimer_liste_Point(ancient_contour);
+        free(tab_contour.tab);
         nb_segments+=current_contour->contour.taille;
         current_contour=current_contour->suiv;
     }
