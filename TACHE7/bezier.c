@@ -1,5 +1,3 @@
-#include "TACHE1/image.h"
-#include "liste_chainee.h"
 #include "tache3.h"
 #include <math.h>
 #include "bezier.h" 
@@ -50,17 +48,49 @@ Bezier3 conversion_degre_2_3 (Bezier2 b){
     Bezier3 c_converti=creer_b3(b.c0 , c1 , c2 , b.c2);
 }
 
+Liste_Point ajoute_bezier2 (Bezier2 B , Liste_Point contour){
+    contour=ajouter_element_liste_Point(contour,B.c0);
+    contour=ajouter_element_liste_Point(contour,B.c1);
+    contour=ajouter_element_liste_Point(contour,B.c2);
+    return contour;
+}
+
 double distance_point_bezier2 (){}
 
 double distance_point_bezier3 (){}
+
+Bezier2 approx_bezier2 (Tableau_Point contour , int j1 , int j2){
+    Point C0= contour.tab[j1]; //C0 = Pj1
+    Point C2= contour.tab[j2]; //C2 = Pj2
+    Point C1;
+    int n = j2-j1;
+
+    if (n==1){ //le contour est réduit a deux points
+        C1= creer_point((C0.abs+C1.abs)/2, (C0.ord+C1.ord)/2); // C1= (Pj1+Pj2)/2
+    } else {
+        int alpha=(3*n)/(n*n-1);
+        int beta=(1-2*n)/(2*(n+1));
+        int somme_abs=0;
+        double somme_ord=0;
+        for (int i = 1; i < n; i++)
+        {
+            somme_abs+=contour.tab[i+j1].abs;
+            somme_ord+=contour.tab[i+j1].ord;
+        }
+        double C1_abs= alpha*somme_abs + beta*(C0.abs+C2.abs);
+        double C1_ord= alpha*somme_ord + beta*(C0.ord+C2.ord);
+        C1=creer_point(C1_abs, C1_ord);
+    }
+    Bezier2 approx= creer_b2(C0,C1,C2);
+    return approx;
+}
+
+
 
 Liste_Point simplification_douglas_peucker(Tableau_Point tab_contour,int indice_a,int indice_b,double d){
 
 }
 
-Bezier2 approx_bezier2 (Tableau_Point contour,int j1,int j2){
-    
-}
 
 Bezier3 approx_bezier3 (Tableau_Point tab_contour,int indice_a,int indice_b){
     int n =indice_b-indice_a;

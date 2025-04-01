@@ -1,5 +1,4 @@
 #include<stdio.h>
-#include "TACHE2/geometrie2d.h"
 
 typedef struct Bezier2_
 {
@@ -32,8 +31,8 @@ double distance_point_bezier2 ();
 double distance_point_bezier3 ();
 
 // approximation d'une partie du contour en une courbe de bézier de degré deux
-Bezier2 approx_bezier2 (Liste_Point contour);
+Bezier2 approx_bezier2 (Tableau_Point contour,int j1,int j2);
 
 // approximation d'une partie du contour en une courbe de bézier de degré trois
-Bezier3 approx_bezier3 (Liste_Point contour);
+Bezier3 approx_bezier3 (Tableau_Point tab_contour,int indice_a,int indice_b);
 
