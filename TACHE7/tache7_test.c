@@ -48,7 +48,6 @@ int main(int argc,char **argv){
         nb_segments=nb_segments/4;
         printf("Il y a un total de %d courbes après simplifcation avec d=%f\n",nb_segments,d);
         affiche_liste_Contour(L);
-        tracer_EPS_contour_multiple_bezier3(argv[4],I,L,argv[1]);
+        tracer_EPS_contour_multiple_bezier3(argv[4],I,L,argv[1], false);
         supprimer_liste_contour(L);
-
 }

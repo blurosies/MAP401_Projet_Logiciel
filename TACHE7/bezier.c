@@ -127,9 +127,10 @@ Bezier2 approx_bezier2 (Tableau_Point contour , int j1 , int j2){
 }
 
 Liste_Point simplification_douglas_peucker_3(Tableau_Point tab_contour,int j1,int j2,double d){
-    Liste_Point l =creer_liste_Point_vide();
-    int n =j2-j1;
-    Bezier3 b =approx_bezier3(tab_contour,j1,j2);
+    Liste_Point l =creer_liste_Point_vide(); //Liste pour ajouter les courbes
+    int n =j2-j1; // nombre de segments
+    Bezier3 b =approx_bezier3(tab_contour,j1,j2); //approxilation du contour en une courbe
+    // rechercher le point Pk le plus éloigné
     double dmax=0;
     int k = j1;
     for(int j=j1+1;j<=j2;j++){
@@ -142,16 +143,20 @@ Liste_Point simplification_douglas_peucker_3(Tableau_Point tab_contour,int j1,in
         }
     }
     if(dmax <=d){
+        // ajout de la Bézier à la liste
         l=ajoute_bezier3(b,l);
     }
     else{
+        // simplifier de j1 à k , puis de k à j2
         Liste_Point l1=simplification_douglas_peucker_3(tab_contour,j1,k,d);
         Liste_Point l2=simplification_douglas_peucker_3(tab_contour,k,j2,d);
+        //concaténatio  des deux séquences
         l=concatener_liste_Point(l1,l2);
     }
     return l;
 }
 
+// distance entre point et courbe de bézier3
 double distance_point_bezier3(Point p,Bezier3 b,double ti){
     return dist_points(p,calcul_ct_3(ti,b));
 }
@@ -160,13 +165,14 @@ Bezier3 approx_bezier3 (Tableau_Point tab_contour,int j1,int j2){
     Bezier3 b;
     int n =j2-j1;
     double d_n=(double) n ;
-    if(n==1 || n==2){
+    if(n==1 || n==2){ // contour réduit à deux ou trois points
         Bezier2 b2=approx_bezier2(tab_contour,j1,j2);
         b =conversion_degre_2_3(b2);
     }
-    else {
+    else { // contour plus de trois point
         Point c0=tab_contour.tab[j1];
         Point c3=tab_contour.tab[j2];
+        // Calcul des coefs
         double alpha=((-15)*pow(d_n,3)+5*pow(d_n,2)+2*n+4)/(3*(d_n+2)*(3*pow(d_n,2)+1));
         double beta=(10*pow(d_n,3)-(15*pow(d_n,2))+d_n+2)/(3*(d_n+2)*(3*pow(d_n,2)+1));
         double lambda=(70*d_n)/(3*(pow(d_n,2)-1)*(pow(d_n,2)-4)*(3*pow(d_n,2)+1));
@@ -223,7 +229,8 @@ void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_
     }
     fclose(f);
 }
-void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *nom){
+void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *nom, bool conversion){
+    
     Cellule_Liste_Contour *current_contour =L.first;
     for(int i = 0;i<L.taille;i++){
         if(i==0){
