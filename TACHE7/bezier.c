@@ -181,12 +181,11 @@ void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_
          f = fopen(fichier,"a");
     }
     fprintf(f,"%f %f moveto\n",current->point.abs,I.la_hauteur_de_l_image-current->point.ord);
-    current=current->suiv;
-    for(int i =0;i<(L.taille-1)/3;i++)
+    for(int i =0;i<L.taille/4;i++)
     {
         
-        fprintf(f,"%f %f %f %f %f %f curveto\n",current->point.abs,I.la_hauteur_de_l_image- current->point.ord,current->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->point.ord,current->suiv->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->suiv->point.ord);
-        current=current->suiv->suiv->suiv;
+        fprintf(f,"%f %f %f %f %f %f curveto\n",current->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->point.ord,current->suiv->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->suiv->point.ord,current->suiv->suiv->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->suiv->suiv->point.ord);
+        current=current->suiv->suiv->suiv->suiv;
     }
     if(dernier_contour){
         fprintf(f,"%s\n",mode);
