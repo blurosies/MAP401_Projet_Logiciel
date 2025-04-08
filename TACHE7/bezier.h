@@ -26,7 +26,7 @@ Point calcul_ct_3 (double t , Bezier3 b );
 Bezier3 conversion_degre_2_3 (Bezier2 b);
 
 // Distance entre un point P et une courbe de bézier de degré 2
-double distance_point_bezier2 (Point p,Bezier3 b,double ti);
+double distance_point_bezier2 (Point p,Bezier2 b,double ti);
 
 // Distance entre un point P et une courbe de bézier de degré 3
 double distance_point_bezier3(Point p,Bezier3 b,double ti);
