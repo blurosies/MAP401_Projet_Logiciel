@@ -1,8 +1,6 @@
 #include "TACHE3/tache3.h"
 #include "sequence_segment.h"
 
-
-
 Liste_Point simplifie_contour(Tableau_Point tab_contour,int indice_a,int indice_b,double d){
     Liste_Point l= creer_liste_Point_vide();
     Segment seg = creer_segment(tab_contour.tab[indice_a],tab_contour.tab[indice_b]);

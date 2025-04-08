@@ -22,6 +22,7 @@ Point calcul_ct_2 (double t , Bezier2 b );
 
 Point calcul_ct_3 (double t , Bezier3 b );
 
+
 // conversion de bezier degré 2 au degré 3
 Bezier3 conversion_degre_2_3 (Bezier2 b);
 
@@ -51,6 +52,6 @@ Liste_Point ajoute_bezier3 (Bezier3 B , Liste_Point contour);
 
 // Fonctions pour exporter les images en fichier eps pour les courbes de Bézier 2 et 3
 
-void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour);
+void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour,int type_bezier);
     
-void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *nom, bool conversion);
+void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *nom,int type_bezier);

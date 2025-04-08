@@ -38,6 +38,7 @@ Point calcul_ct_3 (double t , Bezier3 b ){
     }
 }
 
+
 Bezier3 conversion_degre_2_3 (Bezier2 b){
     double c1_abs=(b.c0.abs+2*b.c1.abs)/3.0;
     double c1_ord=(b.c0.ord+2*b.c1.ord)/3.0;
@@ -71,9 +72,6 @@ double distance_point_bezier2 (Point p,Bezier2 b,double ti){
 }
 
 Liste_Point simplification_douglas_peucker_2(Tableau_Point tab_contour,int j1,int j2,double d){
-    if (d<0){
-        printf("d doit être positif");
-    } else {
         Liste_Point l =creer_liste_Point_vide();
         double n = j2-j1;
         Bezier2 B2= approx_bezier2(tab_contour, j1, j2);
@@ -96,10 +94,8 @@ Liste_Point simplification_douglas_peucker_2(Tableau_Point tab_contour,int j1,in
             Liste_Point l2=simplification_douglas_peucker_2(tab_contour,k,j2,d);
             l=concatener_liste_Point(l1,l2);
         }
-    }
+        return l;
 }
-
-
 Bezier2 approx_bezier2 (Tableau_Point contour , int j1 , int j2){
     Point C0= contour.tab[j1]; //C0 = Pj1
     Point C2= contour.tab[j2]; //C2 = Pj2
@@ -201,11 +197,16 @@ Bezier3 approx_bezier3 (Tableau_Point tab_contour,int j1,int j2){
     return b;
 }
 
-void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour){
+void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour,int type_bezier){
     FILE *f;
     char fichier[256]="";
     char *slash_pos = strrchr(nom,'/');
-    sprintf(fichier,"%.*s/Fichier_eps/%.*s_bezier3.eps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
+    if(type_bezier==2){
+        sprintf(fichier,"%.*s/Fichier_eps/%.*s_bezier2.eps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
+    }
+    else{
+        sprintf(fichier,"%.*s/Fichier_eps/%.*s_bezier3.eps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
+    }
     Cellule_Liste_Point *current = L.first;
     if(premier_countour){
         f = fopen(fichier,"w");
@@ -216,10 +217,8 @@ void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_
          f = fopen(fichier,"a");
     }
     fprintf(f,"%f %f moveto\n",current->point.abs,I.la_hauteur_de_l_image-current->point.ord);
-    current=current->suiv;
-    for(int i =0;i<(L.taille)/4;i++)
+    for(int i =0;i<L.taille/4;i++)
     {
-        
         fprintf(f,"%f %f %f %f %f %f curveto\n",current->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->point.ord,current->suiv->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->suiv->point.ord,current->suiv->suiv->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->suiv->suiv->point.ord);
         current=current->suiv->suiv->suiv->suiv;
     }
@@ -229,18 +228,17 @@ void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_
     }
     fclose(f);
 }
-void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *nom, bool conversion){
-    
+void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *nom,int type_bezier){
     Cellule_Liste_Contour *current_contour =L.first;
     for(int i = 0;i<L.taille;i++){
         if(i==0){
-            tracer_EPS_bezier3(mode,I,L.first->contour,nom,true,false);//Cas premier contour
+            tracer_EPS_bezier3(mode,I,L.first->contour,nom,true,false,type_bezier);//Cas premier contour
         }
         else if(i==L.taille-1){
-            tracer_EPS_bezier3(mode,I,current_contour->contour,nom,false,true);//Cas dernier contour;
+            tracer_EPS_bezier3(mode,I,current_contour->contour,nom,false,true,type_bezier);//Cas dernier contour;
         }
         else {
-            tracer_EPS_bezier3(mode,I,current_contour->contour,nom,false,false);
+            tracer_EPS_bezier3(mode,I,current_contour->contour,nom,false,false,type_bezier);
         }
         current_contour=current_contour->suiv;
     }
