@@ -5,8 +5,8 @@
             "name": "Debug with make",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/tache6", // Chemin vers l'exécutable
-            "args": ["images-tests/image_poly_tache6.pbm","pbm","0.9"],
+            "program": "${workspaceFolder}/tache7_test", // Chemin vers l'exécutable
+            "args": ["./images-tests/image_poly_tache6.pbm","pbm","3","fill"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
