@@ -65,11 +65,40 @@ Liste_Point ajoute_bezier3 (Bezier3 B , Liste_Point contour){
     contour=ajouter_element_liste_Point(contour,B.c3);
     return contour;
 }
-Liste_Point simplification_douglas_peucker_2(Tableau_Point tab_contour,int j1,int j2,double d){
 
+double distance_point_bezier2 (Point p,Bezier2 b,double ti){
+    return dist_points(p,calcul_ct_2(ti,b));
 }
 
-double distance_point_bezier2 (){}
+Liste_Point simplification_douglas_peucker_2(Tableau_Point tab_contour,int j1,int j2,double d){
+    if (d<0){
+        printf("d doit être positif");
+    } else {
+        Liste_Point l =creer_liste_Point_vide();
+        double n = j2-j1;
+        Bezier2 B2= approx_bezier2(tab_contour, j1, j2);
+        double dmax = 0;
+        int k = j1;
+        for(int j=j1+1;j<=j2;j++){
+            int i = j-j1;
+            double ti=(double)i/(double)n;
+            double dj=distance_point_bezier2(tab_contour.tab[j1+i], B2,ti);
+            if(dmax <dj) {
+                dmax=dj;
+                k=j;
+            }
+        }
+        if(dmax <=d){
+            l=ajoute_bezier2(B2,l);
+        }
+        else{
+            Liste_Point l1=simplification_douglas_peucker_2(tab_contour,j1,k,d);
+            Liste_Point l2=simplification_douglas_peucker_2(tab_contour,k,j2,d);
+            l=concatener_liste_Point(l1,l2);
+        }
+    }
+}
+
 
 Bezier2 approx_bezier2 (Tableau_Point contour , int j1 , int j2){
     Point C0= contour.tab[j1]; //C0 = Pj1
@@ -181,7 +210,8 @@ void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_
          f = fopen(fichier,"a");
     }
     fprintf(f,"%f %f moveto\n",current->point.abs,I.la_hauteur_de_l_image-current->point.ord);
-    for(int i =0;i<L.taille/4;i++)
+    current=current->suiv;
+    for(int i =0;i<(L.taille)/4;i++)
     {
         
         fprintf(f,"%f %f %f %f %f %f curveto\n",current->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->point.ord,current->suiv->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->suiv->point.ord,current->suiv->suiv->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->suiv->suiv->point.ord);
