@@ -52,6 +52,6 @@ int main (int argc,char **argv ){
     }
     nb_segments=nb_segments/2;
     printf("Il y a un total de %d segments après simplifcation avec d=%f\n",nb_segments,d);
-    tracer_EPS_contour_multiple(argv[4],I,L,argv[1]);
+    tracer_EPS_contour_multiple(argv[4],I,L,argv[1],true);
     supprimer_liste_contour(L);
 }

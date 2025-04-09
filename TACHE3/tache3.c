@@ -205,11 +205,16 @@ Liste_Contour contour_complet(Image I){
     return contours;
 }
 
-void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour){
+void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour,bool simplifier){
     FILE *f;
     char fichier[256]="";
     char *slash_pos = strrchr(nom,'/');
-    sprintf(fichier,"%.*s/Fichier_eps/%.*seps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
+    if(simplifier==false){
+        sprintf(fichier,"%.*s/Fichier_eps/%.*seps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);;
+    }
+    else{
+        sprintf(fichier,"%.*s/Fichier_eps/%.*s_segments.eps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
+    }
     Cellule_Liste_Point *current = L.first;
     if(premier_countour){
         f = fopen(fichier,"w");
@@ -232,17 +237,17 @@ void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour
     }
     fclose(f);
 }
-void tracer_EPS_contour_multiple(char *mode,Image I,Liste_Contour L,char *nom){
+void tracer_EPS_contour_multiple(char *mode,Image I,Liste_Contour L,char *nom,bool simplifier){
     Cellule_Liste_Contour *current_contour =L.first;
     for(int i = 0;i<L.taille;i++){
         if(i==0){
-            tracer_EPS(mode,I,L.first->contour,nom,true,false);//Cas premier contour
+            tracer_EPS(mode,I,L.first->contour,nom,true,false,simplifier);//Cas premier contour
         }
         else if(i==L.taille-1){
-            tracer_EPS(mode,I,current_contour->contour,nom,false,true);//Cas dernier contour;
+            tracer_EPS(mode,I,current_contour->contour,nom,false,true,simplifier);//Cas dernier contour;
         }
         else {
-            tracer_EPS(mode,I,current_contour->contour,nom,false,false);
+            tracer_EPS(mode,I,current_contour->contour,nom,false,false,simplifier);
         }
         current_contour=current_contour->suiv;
     }

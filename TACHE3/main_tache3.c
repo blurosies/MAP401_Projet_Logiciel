@@ -10,9 +10,9 @@ int main(int argc , char ** argv){
     I=lire_fichier_image(argv[1]);
     L=contour_complet(I);
     if(L.taille==1){ //Cas ou l'image a un seul contour
-        tracer_EPS(argv[2],I,L.first->contour,argv[1],true,true);
+        tracer_EPS(argv[2],I,L.first->contour,argv[1],true,true,false);
     }
     else{ // Cas ou l'image a plusieur contours
-    tracer_EPS_contour_multiple(argv[2],I,L,argv[1]);
+    tracer_EPS_contour_multiple(argv[2],I,L,argv[1],false);
     }
 }

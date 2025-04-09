@@ -37,7 +37,7 @@ INCLUDEOPTS = -I$(INCDIR)
 COMPILOPTS = -g -Wall $(INCLUDEOPTS)
 
 # liste des executables
-EXECUTABLES = test_image test_geometrie main_tache3 tache6_test tache6 tache7_test
+EXECUTABLES = test_image test_geometrie main_tache3 tache6_test tache6 tache7_test_bezier2 tache7_test_bezier3 tache7
 
 
 #############################################################################
@@ -137,10 +137,24 @@ bezier.o : TACHE7/bezier.c TACHE7/bezier.h TACHE3/tache3.h
 	@echo "Compilation du module tache7"
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
-tache7_test.o : TACHE7/tache7_test.c TACHE7/bezier.h 
+tache7_test_bezier2.o : TACHE7/tache7_test_bezier2.c TACHE7/bezier.h 
 	@echo ""
 	@echo "---------------------------------------------"
-	@echo "Compilation du module tache7_test"
+	@echo "Compilation du module tache7_test_bezier2"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+tache7_test_bezier3.o : TACHE7/tache7_test_bezier3.c TACHE7/bezier.h 
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module tache7_test_bezier2"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+tache7.o : TACHE7/tache7.c TACHE7/bezier.h 
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module tache7"
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
@@ -179,13 +193,26 @@ tache6: tache6.o image.o liste_chainee.o tache3.o geometrie2d.o
 	@echo "Creation de l'executable "$@
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
-tache7_test: bezier.o tache7_test.o tache3.o liste_chainee.o image.o geometrie2d.o
+tache7_test_bezier2: bezier.o tache7_test_bezier2.o tache3.o liste_chainee.o image.o geometrie2d.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
 
+tache7_test_bezier3: bezier.o tache7_test_bezier3.o tache3.o liste_chainee.o image.o geometrie2d.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+
+tache7: bezier.o tache7.o tache3.o liste_chainee.o image.o geometrie2d.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
 
 # regle pour "nettoyer" le r�pertoire
 clean:
