@@ -197,18 +197,19 @@ Bezier3 approx_bezier3 (Tableau_Point tab_contour,int j1,int j2){
     return b;
 }
 
-void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour,int type_bezier){
-    FILE *f;
+//prend un seul contour
+void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_contour,bool dernier_contour,int type_bezier){
+    FILE *f; // fichier pour stocké l'image finale
     char fichier[256]="";
     char *slash_pos = strrchr(nom,'/');
-    if(type_bezier==2){
+    if(type_bezier==2){ // si simplification de bézier de degré 2
         sprintf(fichier,"%.*s/Fichier_eps/%.*s_bezier2.eps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
     }
-    else{
+    else{ // si courbe de bézier 3 de base 
         sprintf(fichier,"%.*s/Fichier_eps/%.*s_bezier3.eps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
     }
     Cellule_Liste_Point *current = L.first;
-    if(premier_countour){
+    if(premier_contour){ // si premier contour de l'image
         f = fopen(fichier,"w");
         fprintf(f,"%%!PS-Adobe-3.0 EPSF-3.0\n%%%%BoundingBox: %d %d %d %d\n",0,0,I.la_largeur_de_l_image,I.la_hauteur_de_l_image);
         fprintf(f,"0 setlinewidth\n");
@@ -222,12 +223,14 @@ void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_
         fprintf(f,"%f %f %f %f %f %f curveto\n",current->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->point.ord,current->suiv->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->suiv->point.ord,current->suiv->suiv->suiv->point.abs,I.la_hauteur_de_l_image-current->suiv->suiv->suiv->point.ord);
         current=current->suiv->suiv->suiv->suiv;
     }
-    if(dernier_contour){
+    if(dernier_contour){ // si dernier contour
         fprintf(f,"%s\n",mode);
         fprintf(f,"showpage\n");
     }
     fclose(f);
 }
+
+// construit l'image complete avec tous les contours
 void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *nom,int type_bezier){
     Cellule_Liste_Contour *current_contour =L.first;
     for(int i = 0;i<L.taille;i++){
