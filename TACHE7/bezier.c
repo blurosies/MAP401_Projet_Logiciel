@@ -198,15 +198,48 @@ Bezier3 approx_bezier3 (Tableau_Point tab_contour,int j1,int j2){
 }
 
 //prend un seul contour
-void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_contour,bool dernier_contour,int type_bezier){
-    FILE *f; // fichier pour stocké l'image finale
-    char fichier[256]="";
-    char *slash_pos = strrchr(nom,'/');
-    if(type_bezier==2){ // si simplification de bézier de degré 2
-        sprintf(fichier,"%.*s/Fichier_eps/%.*s_bezier2.eps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
+int tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char*dossier,char *nom,bool premier_contour,bool dernier_contour,int type_bezier){
+    FILE *f;
+    char fichier[512]="";
+    FILE *test_dir = NULL;
+    char test_file[512];
+    snprintf(test_file,sizeof(test_file), "%s/tmp_test_eps",dossier);//On crée un fichier temporaire pour voir si le chemin vers le dossier est bon
+    test_dir = fopen(test_file,"w");
+    if(test_dir == NULL){
+        printf("Erreur : Dossier de sortie invalide ou sans permissions d'écriture :\n");//retourne une erreur si le dossier est inacessible
+        printf("  -> Chemin essayé : %s\n", dossier);
+        return 1;
     }
-    else{ // si courbe de bézier 3 de base 
-        sprintf(fichier,"%.*s/Fichier_eps/%.*s_bezier3.eps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
+    fclose(test_dir);
+    remove(test_file);
+    
+    //On recupere le nom de base du fichier sans le chemin
+    char *nom_base = strrchr(nom, '/'); //renvoie la derniere occurence du caractere /
+    if(nom_base!=NULL){
+        nom_base = nom_base + 1;
+    }
+    else{
+        nom_base = nom;
+    }
+    // Vérification de l'extension
+    char *dot_pos = strrchr(nom_base, '.');
+    if (dot_pos == NULL) {
+        printf("Erreur : Le fichier d'entree n'a pas d'extension\n");
+        return 1;
+    }
+    int longueur_nom = dot_pos - nom_base;
+
+    if(type_bezier==2){
+        snprintf(fichier, sizeof(fichier), "%s/%.*s_bezier2.eps",dossier,longueur_nom,nom_base);
+    }
+    else{
+        snprintf(fichier, sizeof(fichier), "%s/%.*s_bezier3.eps",dossier,longueur_nom,nom_base);
+    }
+    f = fopen(fichier,"a");
+    if(f== NULL){
+        printf("Erreur : Impossible de créer le fichier EPS :\n");
+        printf("  -> Chemin essayé : %s\n", fichier);
+        return 1 ;
     }
     Cellule_Liste_Point *current = L.first;
     if(premier_contour){ // si premier contour de l'image
@@ -228,20 +261,28 @@ void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_
         fprintf(f,"showpage\n");
     }
     fclose(f);
+    if(dernier_contour){
+        printf("Fichier EPS cree avec succes : %s\n",fichier);
+    }
+    return 0;
 }
 
 // construit l'image complete avec tous les contours
-void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *nom,int type_bezier){
+void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *dossier,char *nom,int type_bezier){
     Cellule_Liste_Contour *current_contour =L.first;
+    int erreur =0;
     for(int i = 0;i<L.taille;i++){
         if(i==0){
-            tracer_EPS_bezier3(mode,I,L.first->contour,nom,true,false,type_bezier);//Cas premier contour
+            erreur=tracer_EPS_bezier3(mode,I,L.first->contour,dossier,nom,true,false,type_bezier);//Cas premier contour
         }
         else if(i==L.taille-1){
-            tracer_EPS_bezier3(mode,I,current_contour->contour,nom,false,true,type_bezier);//Cas dernier contour;
+            erreur=tracer_EPS_bezier3(mode,I,current_contour->contour,dossier,nom,false,true,type_bezier);//Cas dernier contour;
         }
         else {
-            tracer_EPS_bezier3(mode,I,current_contour->contour,nom,false,false,type_bezier);
+            erreur=tracer_EPS_bezier3(mode,I,current_contour->contour,dossier,nom,false,false,type_bezier);
+        }
+        if(erreur==1){
+            return;
         }
         current_contour=current_contour->suiv;
     }

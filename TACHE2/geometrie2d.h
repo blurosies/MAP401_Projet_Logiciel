@@ -1,3 +1,6 @@
+#ifndef GEOMETRIE2D_H
+#define GEOMETRIE2D_H
+
 typedef struct Point_
 {
 	double abs,ord;
@@ -49,3 +52,5 @@ double dist_points(Point a, Point b);
 
 // calculer la distance point segment
 double distance_point_segment (Point a, Segment seg);
+
+#endif

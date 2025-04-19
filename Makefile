@@ -37,7 +37,7 @@ INCLUDEOPTS = -I$(INCDIR)
 COMPILOPTS = -g -Wall $(INCLUDEOPTS)
 
 # liste des executables
-EXECUTABLES = test_image test_geometrie main_tache3 tache6_test tache6 tache7_test_bezier2 tache7_test_bezier3 tache7
+EXECUTABLES = test_image test_geometrie main_tache3 tache6_test tache6_main tache7_test_bezier2 tache7_test_bezier3 tache7 main
 
 
 #############################################################################
@@ -46,6 +46,7 @@ EXECUTABLES = test_image test_geometrie main_tache3 tache6_test tache6 tache7_te
 
 ########################################################
 # la r�gle par d�faut
+.DEFAULT_GOAL := main
 all : $(EXECUTABLES)
 
 ########################################################
@@ -125,7 +126,14 @@ sequence_segment.o : TACHE6/sequence_segment.h
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-tache6.o : TACHE6/tache6.c TACHE3/tache3.h TACHE3/liste_chainee.h TACHE1/image.h TACHE6/sequence_segment.h
+tache6.o :  TACHE6/tache6.c TACHE6/tache6.h TACHE3/tache3.h TACHE3/liste_chainee.h TACHE1/image.h TACHE6/sequence_segment.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module tache6"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+tache6_main.o : TACHE6/tache6_main.c TACHE6/tache6.c TACHE3/tache3.h TACHE3/liste_chainee.h TACHE1/image.h TACHE6/sequence_segment.h
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Compilation du module tache6"
@@ -158,13 +166,29 @@ tache7.o : TACHE7/tache7.c TACHE7/bezier.h
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
+main.o : main.c TACHE3/tache3.h TACHE6/tache6.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module main"
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+
 ########################################################
 # regles explicites de creation des executables
+
+# Cible principale - ne construit que le programme main
+main: main.o tache3.o image.o bezier.o geometrie2d.o liste_chainee.o tache6.o
+	@echo "\n---------------------------------------------"
+	@echo "Creation de l'executable $@"
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+
 
 test_image : test_image.o image.o 
 	@echo ""
 	@echo "---------------------------------------------"
-	@echo "Creation de l'executable "$@
+	@echo "Creation de l'executable "$@Y
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
 
@@ -187,7 +211,7 @@ tache6_test: tache6_test.o geometrie2d.o
 	@echo "Creation de l'executable "$@
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
-tache6: tache6.o image.o liste_chainee.o tache3.o geometrie2d.o 
+tache6_main: tache6_main.o image.o liste_chainee.o tache3.o geometrie2d.o 
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@
@@ -213,6 +237,7 @@ tache7: bezier.o tache7.o tache3.o liste_chainee.o image.o geometrie2d.o
 	@echo "Creation de l'executable "$@
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
+
 
 # regle pour "nettoyer" le r�pertoire
 clean:

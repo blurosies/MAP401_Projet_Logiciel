@@ -184,7 +184,7 @@ Liste_Point contour(Image I,Image M, Point init){
     }
     return L;
 }
-Liste_Contour contour_complet(Image I){
+Liste_Contour contour_complet(Image I,bool affichage){
     int nb_segments=0;
     Liste_Contour contours=creer_liste_Contour_vide();
     Liste_Point cand=liste_candidats(I);
@@ -201,23 +201,57 @@ Liste_Contour contour_complet(Image I){
         nb_segments+=current_contour->contour.taille-1;
         current_contour=current_contour->suiv;
     }
-    printf("Il y a %d contours et un total de %d segments \n",contours.taille,nb_segments);
+    if(affichage){
+        printf("Il y a %d contours et un total de %d segments \n",contours.taille,nb_segments);
+    }
     return contours;
 }
 
-void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour,bool simplifier){
+int tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,char *dossier,bool premier_countour,bool dernier_contour,bool simplifier){
     FILE *f;
-    char fichier[256]="";
-    char *slash_pos = strrchr(nom,'/');
-    if(simplifier==false){
-        sprintf(fichier,"%.*s/Fichier_eps/%.*seps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);;
+    char fichier[512]="";
+    FILE *test_dir = NULL;
+    char test_file[512];
+    snprintf(test_file,sizeof(test_file), "%s/tmp_test_eps",dossier);//On crée un fichier temporaire pour voir si le chemin vers le dossier est bon
+    test_dir = fopen(test_file,"w");
+    if(test_dir == NULL){
+        printf("Erreur : Dossier de sortie invalide ou sans permissions d'écriture :\n");//retourne une erreur si le dossier est inacessible
+        printf("  -> Chemin essayé : %s\n", dossier);
+        return 1;
+    }
+    fclose(test_dir);
+    remove(test_file);
+    
+    //On recupere le nom de base du fichier sans le chemin
+    char *nom_base = strrchr(nom, '/'); //renvoie la derniere occurence du caractere /
+    if(nom_base!=NULL){
+        nom_base = nom_base + 1;
     }
     else{
-        sprintf(fichier,"%.*s/Fichier_eps/%.*s_segments.eps",(int)(slash_pos -nom),nom,(int)(strlen(nom) - (slash_pos -nom)-4),slash_pos +1);
+        nom_base = nom;
+    }
+    // Vérification de l'extension
+    char *dot_pos = strrchr(nom_base, '.');
+    if (dot_pos == NULL) {
+        printf("Erreur : Le fichier d'entree n'a pas d'extension\n");
+        return 1;
+    }
+    int longueur_nom = dot_pos - nom_base;
+
+    if(simplifier){
+        snprintf(fichier, sizeof(fichier), "%s/%.*s_segments.eps",dossier,longueur_nom,nom_base);
+    }
+    else{
+        snprintf(fichier, sizeof(fichier), "%s/%.*s.eps",dossier,longueur_nom,nom_base);
+    }
+    f = fopen(fichier,"w");
+    if(f== NULL){
+        printf("Erreur : Impossible de créer le fichier EPS :\n");
+        printf("  -> Chemin essayé : %s\n", fichier);
+        return 1 ;
     }
     Cellule_Liste_Point *current = L.first;
     if(premier_countour){
-        f = fopen(fichier,"w");
         fprintf(f,"%%!PS-Adobe-3.0 EPSF-3.0\n%%%%BoundingBox: %d %d %d %d\n",0,0,I.la_largeur_de_l_image,I.la_hauteur_de_l_image);
         fprintf(f,"0 setlinewidth\n");
     }
@@ -236,18 +270,26 @@ void tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour
         fprintf(f,"showpage\n");
     }
     fclose(f);
+    if(dernier_contour){
+        printf("Fichier EPS cree avec succes : %s\n",fichier);
+    }
+    return 0;
 }
-void tracer_EPS_contour_multiple(char *mode,Image I,Liste_Contour L,char *nom,bool simplifier){
+void tracer_EPS_contour_multiple(char *mode,Image I,Liste_Contour L,char *dossier,char *nom,bool simplifier){
     Cellule_Liste_Contour *current_contour =L.first;
+    int erreur =0;
     for(int i = 0;i<L.taille;i++){
         if(i==0){
-            tracer_EPS(mode,I,L.first->contour,nom,true,false,simplifier);//Cas premier contour
+            erreur=tracer_EPS(mode,I,L.first->contour,dossier,nom,true,false,simplifier);//Cas premier contour
         }
         else if(i==L.taille-1){
-            tracer_EPS(mode,I,current_contour->contour,nom,false,true,simplifier);//Cas dernier contour;
+            erreur=tracer_EPS(mode,I,current_contour->contour,dossier,nom,false,true,simplifier);//Cas dernier contour;
         }
         else {
-            tracer_EPS(mode,I,current_contour->contour,nom,false,false,simplifier);
+            erreur=tracer_EPS(mode,I,current_contour->contour,dossier,nom,false,false,simplifier);
+        }
+        if(erreur==1){
+            return;
         }
         current_contour=current_contour->suiv;
     }

@@ -52,6 +52,6 @@ Liste_Point ajoute_bezier3 (Bezier3 B , Liste_Point contour);
 
 // Fonctions pour exporter les images en fichier eps pour les courbes de Bézier 2 et 3
 
-void tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *nom,bool premier_countour,bool dernier_contour,int type_bezier);
+int tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char *dossier,char *nom,bool premier_countour,bool dernier_contour,int type_bezier);
     
-void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *nom,int type_bezier);
+void tracer_EPS_contour_multiple_bezier3(char *mode,Image I,Liste_Contour L,char *dossier,char *nom,int type_bezier);

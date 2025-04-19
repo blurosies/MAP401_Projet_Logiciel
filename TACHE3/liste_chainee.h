@@ -4,6 +4,10 @@
 #define SEQUENCE_SEGMENT_H
 #include "TACHE2/geometrie2d.h"
 #endif
+
+#ifndef LISTE_CHAINEE_H
+#define LISTE_CHAINEE_H
+
 /*---- le type cellule de liste de point ----*/
 typedef struct Cellule_Liste_Point_
 {
@@ -91,3 +95,5 @@ Liste_Contour creer_liste_Contour_vide();
 Liste_Contour ajouter_element_liste_Contour(Liste_Contour L, Liste_Point e);
 
 void affiche_liste_Contour(Liste_Contour L);
+
+#endif

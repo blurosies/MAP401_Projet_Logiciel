@@ -1,7 +1,8 @@
+#include "TACHE2/geometrie2d.h"
+
 #ifndef SEQUENCE_SEGMENT_H
 #define SEQUENCE_SEGMENT_H
-#include "TACHE2/geometrie2d.h"
-#endif
+
 
 typedef struct Cellule_Liste_Segment
 {
@@ -16,3 +17,5 @@ typedef struct Liste_Segment
 	Cellule_Liste_Segment *first; /* pointeur sur le premier element de la liste */
 
 } Liste_Segment;
+
+#endif

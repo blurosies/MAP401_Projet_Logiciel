@@ -1,15 +1,15 @@
 #include "bezier.h"
 
 int main(int argc,char **argv){
-    if(argc!=6){
-        printf("Format du programme ./tache3 <nom fichier> <type de fichier (pbm/contours)> <type_bezier> <distance seuil> <mode de remplissage(fill/stroke)> \n");
+    if(argc!=7){
+        printf("Format du programme ./tache7 <YOURPATHTO/DossierDeSortie> <nom fichier> <type de fichier (pbm/contours)> <type_bezier> <distance seuil> <mode de remplissage(fill/stroke)> \n");
         return 1;
         }
         Liste_Contour L;
         Image I;
-        double d = atof(argv[4]);
-        I=lire_fichier_image(argv[1]);
-        L=contour_complet(I);
+        double d = atof(argv[5]);
+        I=lire_fichier_image(argv[2]);
+        L=contour_complet(I,true);
         free(I.pointeur_vers_le_tableau_de_pixels);
         Cellule_Liste_Contour *current_contour =L.first;
         int nb_segments=0;
@@ -38,6 +38,6 @@ int main(int argc,char **argv){
             current_contour=current_contour->suiv;
         }
         printf("Il y a un total de %d courbes après simplifcation avec d=%f\n",nb_segments,d);
-        tracer_EPS_contour_multiple_bezier3(argv[5],I,L,argv[1],atoi(argv[3]));
+        tracer_EPS_contour_multiple_bezier3(argv[6],I,L,argv[1],argv[2],atoi(argv[3]));
         supprimer_liste_contour(L);
 }
