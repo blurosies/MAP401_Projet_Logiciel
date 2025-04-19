@@ -4,25 +4,25 @@
 
 int main(int argc , char ** argv){
     if(argc<=1 || strcmp(argv[1],"-aide")==0){
-        printf("Bienvenue dans le Projet De pbm à EPS \n\n"
-            "Voici les liste des options a votre disposition ainsi que leurs parametre : \n"
-            "Obtenir le nombre de segments et de contour d'une image pbm : \n"
+        printf("Bienvenue dans le Projet De MAP401 \n\n"
+            "Voici les listes des options à votre disposition ainsi que leurs parametres : \n"
+            "Obtenir le nombre de segments et de contour(s) d'une image pbm : \n"
             "           ./main -nb <YOURPATHTO/image.pbm> \n\n"
-            "Obtenir une image eps a partir d'une image pbm : \n"
+            "Obtenir une image eps à partir d'une image pbm : \n"
             "           ./main -eps <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> \n\n"
             "Simplifie une image pbm en une image eps par des segments avec une simplification de degré d correspond a la distance seuil : \n"
             "           ./main -seg <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <type de fichier (pbm/contours)> <distance seuil> <mode de remplissage(fill/stroke)>\n\n"
-            "Simplifie une image pbm en une image eps par des courbes de bézier de degré2 avec une simplification de degré d correspond a la distance seuil : \n"
+            "Simplifie une image pbm en une image eps par des courbes de bézier de degré2 avec une simplification de degré d correspond à la distance seuil : \n"
             "           ./main -b2  <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <type de fichier (pbm/contours)> <distance seuil> <mode de remplissage(fill/stroke)>\n\n"
-            "Simplifie une image pbm en une image eps par des courbes de bézier de degré3 avec une simplification de degré d correspond a la distance seuil : \n"
+            "Simplifie une image pbm en une image eps par des courbes de bézier de degré3 avec une simplification de degré d correspond à la distance seuil : \n"
             "           ./main -b3  <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <type de fichier (pbm/contours)> <distance seuil> <mode de remplissage(fill/stroke)>\n\n"
             "Obtenir la liste des commandes et leurs fonctions\n"
             "           ./main -aide \n");
         }
     else if(strcmp(argv[1],"-nb")==0 ){
         if(argc!=3){
-        printf("Vous avez choisie le parametre -nb qui correspond a l'affichage du "
-            "nombre de segments et de contour de votre image merci de respecter le format suivant : \n"
+        printf("Vous avez choisi le parametre -nb qui correspond l'affichage du nombre de segments et de contour(s) de votre image.\n"
+            "Merci de respecter le format suivant : \n"
             "                     ./main -nb <YOURPATHTO/image.pbm> \n\n");
         }
         else{
@@ -35,8 +35,8 @@ int main(int argc , char ** argv){
     }
     else if(strcmp(argv[1],"-seg")==0 ){
         if(argc!=7){
-        printf("Vous avez choisie le parametre -eps qui correspond a la simplification d'une image pbm en une image eps par des segments avec une simplification de degré d correspondant a la distance seuil : \n"
-            "merci de respecter le format suivant : \n"
+        printf("Vous avez choisi le parametre -eps qui correspond a la simplification d'une image pbm en une image eps par des segments avec une simplification de degré d correspondant à la distance seuil : \n"
+            "Merci de respecter le format suivant : \n"
             "           ./main -seg <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <type de fichier (pbm/contours)> <distance seuil> <mode de remplissage(fill/stroke)>\n\n");
         }
         else{
@@ -67,12 +67,12 @@ int main(int argc , char ** argv){
     else if(strcmp(argv[1],"-b2")==0 || strcmp(argv[1],"-b3")==0){
         if(argc!=7){
             if(strcmp(argv[1],"-b2")==0){
-                printf("Vous avez choisie le parametre -b2 qui Simplifie une image pbm en une image eps par des courbes de bézier de degré2 avec une simplification de degré d correspond a la distance seuil : \n"
+                printf("Vous avez choisi le parametre -b2 qui Simplifie une image pbm en une image eps par des courbes de bézier de degré2 avec une simplification de degré d correspond à la distance seuil : \n"
                 "Merci de respecter le format suivant : \n"
             "           ./main -b2  <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <type de fichier (pbm/contours)> <distance seuil> <mode de remplissage(fill/stroke)>\n\n");
             }
             else if(strcmp(argv[1],"-b3")==0){
-                printf("Vous avez choisie le parametre -b3 qui Simplifie une image pbm en une image eps par des courbes de bézier de degré3 avec une simplification de degré d correspond a la distance seuil : \n"
+                printf("Vous avez choisi le parametre -b3 qui Simplifie une image pbm en une image eps par des courbes de bézier de degré3 avec une simplification de degré d correspond à la distance seuil : \n"
                     "Merci de respecter le format suivant : \n"
                 "           ./main -b3  <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <type de fichier (pbm/contours)> <distance seuil> <mode de remplissage(fill/stroke)>\n\n");
             }
@@ -120,8 +120,8 @@ int main(int argc , char ** argv){
     }
     else if(strcmp(argv[1],"-eps")==0 ){
         if(argc!=5){
-        printf("Vous avez choisie le parametre -eps qui correspond a la création d'une image eps a partir d'une image pbm \n"
-            "merci de respecter le format suivant : \n"
+        printf("Vous avez choisi le parametre -eps qui correspond à la création d'une image eps a partir d'une image pbm \n"
+            "Merci de respecter le format suivant : \n"
             "           ./main -eps <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <mode de remplissage(fill/stroke)> n\n");
         }
         else{
@@ -134,7 +134,7 @@ int main(int argc , char ** argv){
         }
     }
     else{
-        printf("Commande inconnu pour voir la liste de commande faite : \n./main -aide \n");
+        printf("Commande inconnue. Pour voir la liste de commandes executez : \n./main -aide \n");
     }
     return 0;
 }
