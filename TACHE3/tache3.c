@@ -161,6 +161,43 @@ Point avancer(Point current,Orientation O){
     }
     return current;
 }
+Liste_Contour contour_depuis_txt(char *file,Image *I){
+    FILE *fichier = fopen(file,"r");
+    if (fichier == NULL) {
+        fprintf(stderr, "Erreur lors de l'ouverture du fichier\n");
+        exit(EXIT_FAILURE);
+    }
+    I->la_largeur_de_l_image=0;
+    I->la_hauteur_de_l_image=0;
+    Liste_Contour liste_contours = creer_liste_Contour_vide();
+    int nb_contours;
+    fscanf(fichier, "%d", &nb_contours);
+
+    for (int i = 0; i < nb_contours; i++) {
+        int nb_points;
+        fscanf(fichier, "%d", &nb_points);
+
+        Liste_Point contour = creer_liste_Point_vide();
+        
+        for (int j = 0; j < nb_points; j++) {
+            double x, y;
+            fscanf(fichier, "%lf %lf", &x, &y);
+            Point p = creer_point(x, y);
+            contour = ajouter_element_liste_Point(contour, p);
+            if(x> I->la_largeur_de_l_image){
+                I->la_largeur_de_l_image=x;
+            }
+            if(y>I->la_hauteur_de_l_image){
+                I->la_hauteur_de_l_image=y;
+            }
+        }
+
+        liste_contours = ajouter_element_liste_Contour(liste_contours, contour);
+    }
+
+    fclose(fichier);
+    return liste_contours;
+}
 
 Liste_Point contour(Image I,Image M, Point init){
     Liste_Point L = creer_liste_Point_vide();
@@ -244,7 +281,7 @@ int tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,char *dossier,bool pre
     else{
         snprintf(fichier, sizeof(fichier), "%s/%.*s.eps",dossier,longueur_nom,nom_base);
     }
-    f = fopen(fichier,"w");
+    f = fopen(fichier,"a");
     if(f== NULL){
         printf("Erreur : Impossible de créer le fichier EPS :\n");
         printf("  -> Chemin essayé : %s\n", fichier);
@@ -252,6 +289,7 @@ int tracer_EPS(char *mode,Image I,Liste_Point L,char *nom,char *dossier,bool pre
     }
     Cellule_Liste_Point *current = L.first;
     if(premier_countour){
+        f = fopen(fichier,"w");
         fprintf(f,"%%!PS-Adobe-3.0 EPSF-3.0\n%%%%BoundingBox: %d %d %d %d\n",0,0,I.la_largeur_de_l_image,I.la_hauteur_de_l_image);
         fprintf(f,"0 setlinewidth\n");
     }

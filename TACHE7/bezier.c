@@ -262,7 +262,7 @@ int tracer_EPS_bezier3(char *mode,Image I,Liste_Point L,char*dossier,char *nom,b
     }
     fclose(f);
     if(dernier_contour){
-        printf("Fichier EPS cree avec succes : %s\n",fichier);
+        printf("Fichier EPS crée avec succes : %s\n",fichier);
     }
     return 0;
 }

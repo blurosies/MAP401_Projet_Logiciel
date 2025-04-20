@@ -43,9 +43,14 @@ int main(int argc , char ** argv){
             Liste_Contour L;
             Image I;
             double d = atof(argv[5]);
-            I=lire_fichier_image(argv[3]);
-            L=contour_complet(I,true);
-            free(I.pointeur_vers_le_tableau_de_pixels);
+            if(strcmp(argv[4],"contours")==0){
+                L=contour_depuis_txt(argv[3],&I);
+            }
+            else{
+                I=lire_fichier_image(argv[3]);
+                L=contour_complet(I,true);
+                free(I.pointeur_vers_le_tableau_de_pixels);
+            }
             Cellule_Liste_Contour *current_contour =L.first;
             int nb_segments=0;
             for(int i=0;i<L.taille;i++){
@@ -59,7 +64,7 @@ int main(int argc , char ** argv){
             }   
     nb_segments=nb_segments/2;
     printf("Il y a un total de %d segments après simplifcation avec d=%f\n",nb_segments,d);
-    tracer_EPS_contour_multiple(argv[5],I,L,argv[3],argv[2],true);
+    tracer_EPS_contour_multiple(argv[6],I,L,argv[3],argv[2],true);
     supprimer_liste_contour(L);
 
         }
@@ -80,9 +85,14 @@ int main(int argc , char ** argv){
             Liste_Contour L;
             Image I;
             double d = atof(argv[5]);
-            I=lire_fichier_image(argv[3]);
-            L=contour_complet(I,true);
-            free(I.pointeur_vers_le_tableau_de_pixels);
+            if(strcmp(argv[4],"contours")==0){
+                L=contour_depuis_txt(argv[3],&I);
+            }
+            else{
+                I=lire_fichier_image(argv[3]);
+                L=contour_complet(I,true);
+                free(I.pointeur_vers_le_tableau_de_pixels);
+            }
             Cellule_Liste_Contour *current_contour =L.first;
             int nb_segments=0;
             for(int i=0;i<L.taille;i++){

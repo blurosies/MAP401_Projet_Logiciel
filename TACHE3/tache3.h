@@ -26,6 +26,9 @@ Orientation gestion_Orientation(Image I,Point current,Orientation O);
 // fait le robot avancer selon son orientation
 Point avancer(Point current,Orientation O);
 
+//extrait le contour d'une image écrite dans un fichier txt
+Liste_Contour contour_depuis_txt(char *file,Image *I);
+
 // determine le contour de l'image
 Liste_Point contour(Image I,Image M, Point init);
 
