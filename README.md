@@ -21,7 +21,6 @@ Voici la liste des options à votre disposition ainsi que leurs paramètres.
 1. Analyse d'image
 
 Obtenir le nombre de segments et de contour(s) d'une image pbm :
-Bash
 
 ```bash
 ./main -nb <YOURPATHTO/image.pbm>
