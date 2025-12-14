@@ -14,7 +14,7 @@ Nous avons fait le choix architectural de regrouper l'ensemble des fonctionnalit
 Pour générer l'exécutable principal `main` :
 ```bash
 make
-
+```
 Liste des commandes
 
 Voici la liste des options à votre disposition ainsi que leurs paramètres.
@@ -23,39 +23,46 @@ Voici la liste des options à votre disposition ainsi que leurs paramètres.
 Obtenir le nombre de segments et de contour(s) d'une image pbm :
 Bash
 
+```bash
 ./main -nb <YOURPATHTO/image.pbm>
-
+```
 2. Conversion simple
 
 Obtenir une image eps à partir d'une image pbm :
 Bash
 
+```bash
 ./main -eps <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm>
-
+```
 3. Simplification par Segments
 
 Simplifie une image pbm en une image eps par des segments avec une simplification de degré d (correspondant à la distance seuil) :
 Bash
 
+```bash
 ./main -seg <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <type de fichier (pbm/contours)> <distance seuil> <mode de remplissage(fill/stroke)>
-
+```
 4. Simplification par Courbes de Bézier (Degré 2)
 
 Simplifie une image pbm en une image eps par des courbes de Bézier de degré 2 avec une simplification de degré d (correspondant à la distance seuil) :
 Bash
 
+```bash
 ./main -b2 <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <type de fichier (pbm/contours)> <distance seuil> <mode de remplissage(fill/stroke)>
 
+```
 5. Simplification par Courbes de Bézier (Degré 3)
 
 Simplifie une image pbm en une image eps par des courbes de Bézier de degré 3 avec une simplification de degré d (correspondant à la distance seuil) :
 Bash
 
+```bash
 ./main -b3 <YOURPATHTO/DossierDeSortie> <YOURPATHTO/image.pbm> <type de fichier (pbm/contours)> <distance seuil> <mode de remplissage(fill/stroke)>
-
+```
 Aide
 
 Obtenir la liste des commandes et leurs fonctions :
 Bash
-
+```bash
 ./main -aide
+```
